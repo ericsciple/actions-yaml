@@ -1,0 +1,81 @@
+{
+  "requestId": "1",
+  "sequence": 0,
+  "log": "",
+  "result": {
+    "type": 7
+  },
+  "errors": []
+}
+---
+{
+  "requestId": "1",
+  "sequence": 1,
+  "log": "",
+  "result": {
+    "type": 5,
+    "bool": true
+  },
+  "errors": []
+}
+---
+{
+  "requestId": "1",
+  "sequence": 2,
+  "log": "",
+  "result": {
+    "type": 6,
+    "num": 123
+  },
+  "errors": []
+}
+---
+{
+  "requestId": "1",
+  "sequence": 3,
+  "log": "",
+  "result": {
+    "type": 0,
+    "lit": "hello world"
+  },
+  "errors": []
+}
+---
+{
+  "requestId": "1",
+  "sequence": 4,
+  "log": "",
+  "result": {
+    "type": 1,
+    "seq": [
+      {
+        "type": 0,
+        "lit": "my item"
+      }
+    ]
+  },
+  "errors": []
+}
+---
+{
+  "requestId": "1",
+  "sequence": 5,
+  "log": "",
+  "result": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "lit": "my-property"
+        },
+        "value": {
+          "type": 0,
+          "lit": "my value"
+        }
+      }
+    ]
+  },
+  "errors": []
+}
+---

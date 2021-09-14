@@ -1,0 +1,58 @@
+{
+  "requestId": "1",
+  "context": {},
+  "expressions": [
+    "1 || 2",
+    "1 || 2 || 3",
+    "1 && 2",
+    "1 && 2 && 3"
+  ]
+}
+---
+{
+  "requestId": "2",
+  "context": {
+    "github": {
+      "sha": 123,
+      "event": {
+        "author": "me",
+        "commits": [
+          {
+            "sha": 456
+          },
+          {
+            "sha": 789
+          }
+        ]
+      }
+    }
+  },
+  "expressions": [
+    "github.sha",
+    "github.event",
+    "github.event.author",
+    "github.event.commits[0].sha",
+    "github.event.commits[1].sha"
+  ]
+}
+---
+{
+  "requestId": "3",
+  "context": {
+    "my-const": 123456
+  },
+  "expressions": [
+    "my-const",
+    ""
+  ]
+}
+---
+{
+  "requestId": "4",
+  "context": {},
+  "expressions": [
+    "true ||",
+    "fromJson('{malformed_json')"
+  ]
+}
+---

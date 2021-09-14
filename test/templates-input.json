@@ -1,0 +1,47 @@
+{
+  "requestId": "1",
+  "context": {
+    "github": {
+      "sha": 123,
+      "event": {
+        "author": "me",
+        "commits": [
+          {
+            "sha": 456
+          },
+          {
+            "sha": 789
+          }
+        ]
+      }
+    }
+  },
+  "schema": "{\"definitions\":{}}",
+  "templates": [
+    {
+      "type": "null",
+      "content": "null"
+    },
+    {
+      "type": "boolean",
+      "content": "true"
+    },
+    {
+      "type": "number",
+      "content": "123"
+    },
+    {
+      "type": "string",
+      "content": "\"hello world\""
+    },
+    {
+      "type": "sequence",
+      "content": "[\"my item\"]"
+    },
+    {
+      "type": "mapping",
+      "content": "{\"my-property\": \"my value\"}"
+    }
+  ]
+}
+---
