@@ -1,3 +1,5 @@
+// template-reader *just* does schema validation
+
 import {
   Definition,
   DefinitionType,

@@ -12,6 +12,32 @@ import { readTemplate } from "./template-reader"
 import { evaluateTemplate } from "./template-evaluator"
 import { parseArgs } from "../expressions/command-line-args"
 
+const usage = `\
+Usage: node dist/templates/cli.js [options] <input.json
+
+Validates and parses templates, optionally expanding variable expressions.
+
+Input templates/context are supplied to stdin as json objects.
+Parsed and expanded templates (or errors) are printed to stdout as a json object.
+
+Options:
+  --[no-]expand-expressions
+    If \`--expand-expressions' (default), validate template schema *and* expand
+    variable expressions of the form $\{{context.variable}}, interpolating with
+    values found in the \`context' data supplied from stdin.
+    If \`--no-expand-expressions', only validate template schema, outputting
+    such expressions un-interpolated.
+
+  --pretty
+    print formatted json to stdout
+
+  --help
+    print this usage and exit
+
+Examples:
+  node dist/templates/cli.js --no-expand-expressions <test/templates-input.json
+`
+
 interface Input {
   batchId: string | null | undefined
   schema: string
@@ -31,8 +57,23 @@ interface Output {
   errors: TemplateValidationError[] | undefined
 }
 
-const args = parseArgs(["pretty"], [], false)
+const args = parseArgs(
+  ["pretty", "expand-expressions", "no-expand-expressions"],
+  [],
+  false,
+  usage
+)
 const pretty = args.flags["pretty"] ?? false
+let expandExpressions = true
+
+if (args.flags["expand-expressions"] && args.flags["no-expand-expressions"]) {
+  console.error(
+    "You can't provide both `--expand-expressions' and `--no-expand-expressions'"
+  )
+  process.exit()
+} else if (args.flags["no-expand-expressions"]) {
+  expandExpressions = false
+}
 
 let buffer = ""
 const delimiterPattern = /(^|\r?\n)---(\r?\n)/
@@ -62,7 +103,8 @@ function evaluate(input: Input): void {
       undefined
     )
     let value: TemplateToken | undefined = readResult.value
-    if (context.errors.count === 0) {
+    // if (context.errors.count === 0 && expandExpressions) {
+    if (expandExpressions) {
       value = evaluateTemplate(
         context,
         template.type,
