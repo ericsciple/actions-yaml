@@ -13,7 +13,7 @@ import { evaluateTemplate } from "./template-evaluator"
 import { parseArgs } from "../expressions/command-line-args"
 
 interface Input {
-  requestId: string | null | undefined
+  batchId: string | null | undefined
   schema: string
   templates: Template[]
 }
@@ -24,7 +24,7 @@ interface Template {
 }
 
 interface Output {
-  requestId: string | undefined
+  batchId: string | undefined
   sequence: number
   log: string
   result: TemplateToken | undefined
@@ -72,7 +72,7 @@ function evaluate(input: Input): void {
       )
     }
     const output = <Output>{
-      requestId: input.requestId ?? undefined,
+      batchId: input.batchId ?? undefined,
       sequence: i,
       log: log.join("\n"),
       result: value,

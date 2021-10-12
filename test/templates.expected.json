@@ -1,5 +1,5 @@
 {
-  "requestId": "1",
+  "batchId": "1",
   "sequence": 0,
   "log": "",
   "result": {
@@ -9,7 +9,7 @@
 }
 ---
 {
-  "requestId": "1",
+  "batchId": "1",
   "sequence": 1,
   "log": "",
   "result": {
@@ -20,7 +20,7 @@
 }
 ---
 {
-  "requestId": "1",
+  "batchId": "1",
   "sequence": 2,
   "log": "",
   "result": {
@@ -31,7 +31,7 @@
 }
 ---
 {
-  "requestId": "1",
+  "batchId": "1",
   "sequence": 3,
   "log": "",
   "result": {
@@ -42,7 +42,7 @@
 }
 ---
 {
-  "requestId": "1",
+  "batchId": "1",
   "sequence": 4,
   "log": "",
   "result": {
@@ -58,7 +58,7 @@
 }
 ---
 {
-  "requestId": "1",
+  "batchId": "1",
   "sequence": 5,
   "log": "",
   "result": {

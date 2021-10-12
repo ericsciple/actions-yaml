@@ -1,5 +1,5 @@
 {
-  "requestId": "1",
+  "batchId": "1",
   "context": {
     "github": {
       "sha": 123,

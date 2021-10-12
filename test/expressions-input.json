@@ -1,5 +1,5 @@
 {
-  "requestId": "1",
+  "batchId": "1",
   "context": {},
   "expressions": [
     "1 || 2",
@@ -10,7 +10,7 @@
 }
 ---
 {
-  "requestId": "2",
+  "batchId": "2",
   "context": {
     "github": {
       "sha": 123,
@@ -37,7 +37,7 @@
 }
 ---
 {
-  "requestId": "3",
+  "batchId": "3",
   "context": {
     "my-const": 123456
   },
@@ -48,7 +48,7 @@
 }
 ---
 {
-  "requestId": "4",
+  "batchId": "4",
   "context": {},
   "expressions": [
     "true ||",

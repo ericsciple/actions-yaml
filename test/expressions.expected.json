@@ -1,40 +1,40 @@
 {
-  "requestId": "1",
+  "batchId": "1",
   "sequence": 0,
   "log": "Evaluating: (1 || 2)\nExpanded: (1 || 2)\nResult: 1",
   "result": 1
 }
 ---
 {
-  "requestId": "1",
+  "batchId": "1",
   "sequence": 1,
   "log": "Evaluating: (1 || 2 || 3)\nExpanded: (1 || 2 || 3)\nResult: 1",
   "result": 1
 }
 ---
 {
-  "requestId": "1",
+  "batchId": "1",
   "sequence": 2,
   "log": "Evaluating: (1 && 2)\nExpanded: (1 && 2)\nResult: 2",
   "result": 2
 }
 ---
 {
-  "requestId": "1",
+  "batchId": "1",
   "sequence": 3,
   "log": "Evaluating: (1 && 2 && 3)\nExpanded: (1 && 2 && 3)\nResult: 3",
   "result": 3
 }
 ---
 {
-  "requestId": "2",
+  "batchId": "2",
   "sequence": 0,
   "log": "Evaluating: github.sha\nResult: 123",
   "result": 123
 }
 ---
 {
-  "requestId": "2",
+  "batchId": "2",
   "sequence": 1,
   "log": "Evaluating: github.event\nResult: Object",
   "result": {
@@ -51,49 +51,49 @@
 }
 ---
 {
-  "requestId": "2",
+  "batchId": "2",
   "sequence": 2,
   "log": "Evaluating: github.event.author\nResult: 'me'",
   "result": "me"
 }
 ---
 {
-  "requestId": "2",
+  "batchId": "2",
   "sequence": 3,
   "log": "Evaluating: github.event.commits[0].sha\nResult: 456",
   "result": 456
 }
 ---
 {
-  "requestId": "2",
+  "batchId": "2",
   "sequence": 4,
   "log": "Evaluating: github.event.commits[1].sha\nResult: 789",
   "result": 789
 }
 ---
 {
-  "requestId": "3",
+  "batchId": "3",
   "sequence": 0,
   "log": "Evaluating: my-const\nResult: 123456",
   "result": 123456
 }
 ---
 {
-  "requestId": "3",
+  "batchId": "3",
   "sequence": 1,
   "log": "",
   "errorMessage": "No expression defined"
 }
 ---
 {
-  "requestId": "4",
+  "batchId": "4",
   "sequence": 0,
   "log": "",
   "errorMessage": "Unexpected end of expression: '||'. Located at position 6 within expression: true ||"
 }
 ---
 {
-  "requestId": "4",
+  "batchId": "4",
   "sequence": 1,
   "log": "Evaluating: fromJson('{malformed_json')",
   "errorMessage": "Unexpected token m in JSON at position 1"

@@ -9,7 +9,6 @@
 
 TODO:
 
-- Rename requestId to batchId?
 - Handle errors in templating CLI
 - Fix delimiter pattern in templating CLI
 - YAML parser
@@ -30,3 +29,4 @@ TODO:
   - Add secret masker into expressions
   - Crisply define pulic interface for SDK
   - Split into multiple packages
+  - Better error message for mututally exclusive keys

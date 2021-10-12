@@ -6,13 +6,13 @@ import { createExpressionTree, NamedContextInfo } from "./parser"
 import { TraceWriter } from "./trace-writer"
 
 interface Input {
-  requestId: string | null | undefined
+  batchId: string | null | undefined
   context: { [key: string]: any }
   expressions: string[]
 }
 
 interface Output {
-  requestId: string | undefined
+  batchId: string | undefined
   sequence: number
   log: string
   result: any
@@ -61,7 +61,7 @@ function evaluate(input: Input): void {
       errorCode = (err as any).code
     }
     const output = <Output>{
-      requestId: input.requestId ?? undefined,
+      batchId: input.batchId ?? undefined,
       sequence: i,
       log: log.join("\n"),
       result: result,
