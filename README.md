@@ -30,3 +30,11 @@ TODO:
   - Crisply define pulic interface for SDK
   - Split into multiple packages
   - Better error message for mututally exclusive keys
+
+### Development Setup
+
+```sh
+$ npm install # install npm dependencies
+$ npm run build # compile ts -> js
+$ npm run test # run the tests
+```
