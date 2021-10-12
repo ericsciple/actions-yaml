@@ -34,7 +34,7 @@ TODO:
 ### Development Setup
 
 ```sh
-$ npm install # install npm dependencies
-$ npm run build # compile ts -> js
-$ npm run test # run the tests
+npm install # install npm dependencies
+npm run build # compile ts -> js
+npm run test # run the tests
 ```
