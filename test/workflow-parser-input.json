@@ -5,7 +5,7 @@
   "files": [
     {
       "id": ".github/workflows/ci.yml",
-      "content": "{ \"jobs\": { \"build\": { \"runs-on\": \"ubuntu-latest\", \"steps\": [ { \"run\": \"echo hi\" } ] } } }"
+      "content": "${BATCH_1_FILE_1}"
     }
   ]
 }
@@ -17,7 +17,7 @@
   "files": [
     {
       "id": ".github/workflows/ci.yml",
-      "content": "{ \"jobs\": { \"build\": { \"runs-on\": \"ubuntu-latest\", \"steps\": [ { \"run\": \"echo sha=${{ github.sha }}\" } ] } } }"
+      "content": "${BATCH_2_FILE_1}"
     }
   ]
 }
