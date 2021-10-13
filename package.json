@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp workflows/workflow-schema.json dist/workflows/",
     "format": "prettier --write '**/*.ts' '**/*js'",
     "format-check": "prettier --check '**/*.ts' '**/*.js'",
     "lint": "eslint **/*.ts",
     "lint-fix": "eslint --fix **/*.ts",
     "test": "./test/test.sh",
-    "all": "npm run format && npm run build && npm run lint && ./test/test.sh"
+    "all": "npm run format && npm run build && npm run lint && ./test/test.sh",
+    "release": "./misc/release.sh"
   },
   "repository": {
     "type": "git",

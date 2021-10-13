@@ -653,11 +653,11 @@ export abstract class Definition {
           case CONTEXT: {
             const context = definition
               .get(i)
-              .key.assertSequence(`${DEFINITION} key`)
+              .value.assertSequence(`${DEFINITION} ${CONTEXT}`)
             definition.remove(i)
             const seenReaderContext: { [key: string]: boolean } = {}
             const seenEvaluatorContext: { [key: string]: boolean } = {}
-            for (let j = 0; i < context.count; j++) {
+            for (let j = 0; j < context.count; j++) {
               const itemStr = context
                 .get(j)
                 .assertString(`${CONTEXT} item`).value

@@ -1,0 +1,136 @@
+{
+  "batchId": "1",
+  "log": "",
+  "result": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "lit": "jobs"
+        },
+        "value": {
+          "type": 2,
+          "map": [
+            {
+              "key": {
+                "type": 0,
+                "lit": "build"
+              },
+              "value": {
+                "type": 2,
+                "map": [
+                  {
+                    "key": {
+                      "type": 0,
+                      "lit": "runs-on"
+                    },
+                    "value": {
+                      "type": 0,
+                      "lit": "ubuntu-latest"
+                    }
+                  },
+                  {
+                    "key": {
+                      "type": 0,
+                      "lit": "steps"
+                    },
+                    "value": {
+                      "type": 1,
+                      "seq": [
+                        {
+                          "type": 2,
+                          "map": [
+                            {
+                              "key": {
+                                "type": 0,
+                                "lit": "run"
+                              },
+                              "value": {
+                                "type": 0,
+                                "lit": "echo hi"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+---
+{
+  "batchId": "2",
+  "log": "",
+  "result": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "lit": "jobs"
+        },
+        "value": {
+          "type": 2,
+          "map": [
+            {
+              "key": {
+                "type": 0,
+                "lit": "build"
+              },
+              "value": {
+                "type": 2,
+                "map": [
+                  {
+                    "key": {
+                      "type": 0,
+                      "lit": "runs-on"
+                    },
+                    "value": {
+                      "type": 0,
+                      "lit": "ubuntu-latest"
+                    }
+                  },
+                  {
+                    "key": {
+                      "type": 0,
+                      "lit": "steps"
+                    },
+                    "value": {
+                      "type": 1,
+                      "seq": [
+                        {
+                          "type": 2,
+                          "map": [
+                            {
+                              "key": {
+                                "type": 0,
+                                "lit": "run"
+                              },
+                              "value": {
+                                "type": 3,
+                                "expr": "format('echo sha={0}', github.sha)"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+---
