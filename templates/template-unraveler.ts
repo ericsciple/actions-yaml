@@ -1,3 +1,5 @@
+// Does just-in-time expression expansion
+
 import { CLOSE_EXPRESSION, OPEN_EXPRESSION } from "./template-constants"
 import { TemplateContext } from "./template-context"
 import { TemplateMemory } from "./template-memory"

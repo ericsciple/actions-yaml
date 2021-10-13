@@ -17,11 +17,13 @@ const ARGV_ERROR_CODE = "ARGV"
  * @param {string[]} flags       Allowed flags
  * @param {string[]} options     Allowed options
  * @param {boolean} allowArgs    Whether to allow unnamed arguments
+ * @param {string?} usage        Usage string to be printed with `--help`
  */
 export function parseArgs(
   flags: string[],
   options: string[],
-  allowArgs: boolean
+  allowArgs: boolean,
+  usage?: string
 ): Arguments {
   flags = flags || []
   options = options || []
@@ -29,9 +31,10 @@ export function parseArgs(
 
   const result = new Arguments()
 
-  // Check for --help
   const argv = process.argv.slice(2)
-  if (argv.some((x) => x === "--help")) {
+  // Check for --help
+  if (argv.includes("--help")) {
+    console.log(usage || "Help requested")
     throwError("Help requested", ARG_HELP_CODE)
   }
 
@@ -45,13 +48,13 @@ export function parseArgs(
       const name = arg.substr(2)
 
       // Legal flag
-      if (flags.some((x) => x === name)) {
+      if (flags.includes(name)) {
         result.flags[name] = true
         continue
       }
 
       // Unknown option
-      if (!options.some((x) => x === name)) {
+      if (!options.includes(name)) {
         throwError(`Unknown option '${name}'`)
       }
 

@@ -1,3 +1,5 @@
+// called at runtime. expands expressions and re-validates the schema result after expansion
+
 import {
   Definition,
   DefinitionType,
