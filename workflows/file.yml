@@ -1,0 +1,11 @@
+person:
+  name: Luke
+  age: 27
+  height:
+   unit: inches
+   value: 78
+  alive: true
+  hobbies:
+    - running
+    - podcasts
+    - kids
