@@ -22,11 +22,13 @@ TODO:
   - Find YAML parser (look into RedHat)
   - Make sure we can turn off anchors (memory DOS - e.g. billion laughs attack)
 - Add workflow-specific stuff
-  - actions-specific schema
   - CLI
-  - deeper validation rules (i.e. stuff that pipeline-template-converter does)
+    - Support batch of commands
   - AzDevNext today:
     - Initial YAML parse: /Users/eric/repos/azdevnext/src/Actions/Runtime/Client/WebApi/Pipelines/ObjectTemplating/PipelineTemplateParser.cs
+- Testing
+  - envsubst
+  - jest
 
 - Interface with Actions Service
   - Side-by-side
@@ -39,6 +41,7 @@ TODO:
   - Crisply define pulic interface for SDK
   - Split into multiple packages (yet make local changes work)
   - Better error message for mututally exclusive keys
+  - Deeper validation rules (i.e. stuff that pipeline-template-converter does)
 
 ### Development Setup
 
