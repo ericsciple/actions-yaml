@@ -31,11 +31,11 @@ export function parseArgs(
 
   const result = new Arguments()
 
-  // Check for --help
   const argv = process.argv.slice(2)
-  if (argv.some((x) => x === "--help")) {
+  // Check for --help
+  if (argv.includes("--help")) {
     console.log(usage || "Help requested")
-    process.exit()
+    throwError("Help requested", ARG_HELP_CODE)
   }
 
   // Parse
@@ -48,13 +48,13 @@ export function parseArgs(
       const name = arg.substr(2)
 
       // Legal flag
-      if (flags.some((x) => x === name)) {
+      if (flags.includes(name)) {
         result.flags[name] = true
         continue
       }
 
       // Unknown option
-      if (!options.some((x) => x === name)) {
+      if (!options.includes(name)) {
         throwError(`Unknown option '${name}'`)
       }
 
