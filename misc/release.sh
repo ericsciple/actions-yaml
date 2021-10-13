@@ -2,6 +2,6 @@
 
 set -e
 mkdir -p _temp
-rm _temp/actions.yaml.tar.xz || true
+rm _temp/actions.yaml.tar.gz || true
 cd dist
-tar cvJf ../_temp/actions-yaml.tar.xz *
+tar czvf ../_temp/actions-yaml.tar.gz *
