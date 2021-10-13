@@ -1,3 +1,4 @@
+import yargs from "yargs/yargs"
 import { TraceWriter } from "./trace-writer"
 import {
   TemplateContext,
@@ -10,33 +11,6 @@ import { TemplateSchema } from "./schema"
 import { JSONObjectReader } from "./json-object-reader"
 import { readTemplate } from "./template-reader"
 import { evaluateTemplate } from "./template-evaluator"
-import { parseArgs } from "../expressions/command-line-args"
-
-const usage = `\
-Usage: node dist/templates/cli.js [options] <input.json
-
-Validates and parses templates, optionally expanding variable expressions.
-
-Input templates/context are supplied to stdin as json objects.
-Parsed and expanded templates (or errors) are printed to stdout as a json object.
-
-Options:
-  --[no-]expand-expressions
-    If \`--expand-expressions' (default), validate template schema *and* expand
-    variable expressions of the form $\{{context.variable}}, interpolating with
-    values found in the \`context' data supplied from stdin.
-    If \`--no-expand-expressions', only validate template schema, outputting
-    such expressions un-interpolated.
-
-  --pretty
-    print formatted json to stdout
-
-  --help
-    print this usage and exit
-
-Examples:
-  node dist/templates/cli.js --no-expand-expressions <test/templates-input.json
-`
 
 interface Input {
   batchId: string | null | undefined
@@ -57,23 +31,34 @@ interface Output {
   errors: TemplateValidationError[] | undefined
 }
 
-const args = parseArgs(
-  ["pretty", "expand-expressions", "no-expand-expressions"],
-  [],
-  false,
-  usage
-)
-const pretty = args.flags["pretty"] ?? false
-let expandExpressions = true
+const args = yargs(process.argv.slice(2))
+  .usage(
+    `Usage: node dist/templates/cli.js [options]
 
-if (args.flags["expand-expressions"] && args.flags["no-expand-expressions"]) {
-  console.error(
-    "You can't provide both `--expand-expressions' and `--no-expand-expressions'"
+    Validates and parses templates via stdin, optionally expanding variable expressions. Outputs to stdout`
   )
-  process.exit()
-} else if (args.flags["no-expand-expressions"]) {
-  expandExpressions = false
-}
+  .example(
+    "$0 --no-expand-expressions >out.json <test/templates-input.json",
+    "Validate and parse the input data test/templates-input.json, without expanding expressions, and redirect eoutput to out.json."
+  )
+  .options({
+    "expand-expressions": {
+      type: "boolean",
+      default: true,
+      description:
+        "interpolate variable expressions of the form `${{context.var}}' with values from `context'",
+    },
+    pretty: {
+      type: "boolean",
+      default: false,
+      description: "output formatted json to stdout",
+    },
+  })
+  .strict()
+  .parseSync()
+
+const pretty = args.pretty
+const expandExpressions = args.expandExpressions
 
 let buffer = ""
 const delimiterPattern = /(^|\r?\n)---(\r?\n)/

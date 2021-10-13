@@ -1,5 +1,5 @@
+import yargs from "yargs/yargs"
 import { promisify } from "util"
-import { parseArgs } from "./command-line-args"
 import { ContextData } from "./context-data"
 import { SimpleNamedContextNode } from "./nodes"
 import { createExpressionTree, NamedContextInfo } from "./parser"
@@ -20,8 +20,20 @@ interface Output {
   errorCode: string
 }
 
-const args = parseArgs(["pretty"], [], false)
-const pretty = args.flags["pretty"] ?? false
+const args = yargs(process.argv.slice(2))
+  .usage(`Usage: node dist/expressions/cli.js [options]\n\n`)
+  .example("$0 --pretty >out.json <test/expressions-input.json", "")
+  .options({
+    pretty: {
+      type: "boolean",
+      default: false,
+      description: "output formatted json to stdout",
+    },
+  })
+  .strict()
+  .parseSync()
+
+const pretty = args.pretty
 
 let buffer = ""
 const delimiterPattern = /(^|\r?\n)---(\r?\n)/ // Might be more data

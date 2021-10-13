@@ -1,7 +1,7 @@
-import { parseArgs } from "../expressions/command-line-args"
 import { parseWorkflow } from "./workflow-parser"
 import { TraceWriter } from "../templates/trace-writer"
 import { File } from "./file"
+import yargs from "yargs/yargs"
 
 interface Input {
   batchId: string | null | undefined
@@ -21,8 +21,20 @@ interface Output {
   errorCode: string
 }
 
-const args = parseArgs(["pretty"], [], false)
-const pretty = args.flags["pretty"] ?? false
+const args = yargs(process.argv.slice(2))
+  .usage(`Usage: node dist/workflows/cli.js [options]\n\n`)
+  .example("$0 --pretty >out.json <test/workflow-parser-input.json", "")
+  .options({
+    pretty: {
+      type: "boolean",
+      default: false,
+      description: "output formatted json to stdout",
+    },
+  })
+  .strict()
+  .parseSync()
+
+const pretty = args.pretty
 
 let buffer = ""
 const delimiterPattern = /(^|\r?\n)---(\r?\n)/ // Might be more data
