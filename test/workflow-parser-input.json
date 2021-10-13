@@ -1,0 +1,24 @@
+{
+  "batchId": "1",
+  "command": "parse-workflow",
+  "entryFileId": ".github/workflows/ci.yml",
+  "files": [
+    {
+      "id": ".github/workflows/ci.yml",
+      "content": "{ \"jobs\": { \"build\": { \"runs-on\": \"ubuntu-latest\", \"steps\": [ { \"run\": \"echo hi\" } ] } } }"
+    }
+  ]
+}
+---
+{
+  "batchId": "2",
+  "command": "parse-workflow",
+  "entryFileId": ".github/workflows/ci.yml",
+  "files": [
+    {
+      "id": ".github/workflows/ci.yml",
+      "content": "{ \"jobs\": { \"build\": { \"runs-on\": \"ubuntu-latest\", \"steps\": [ { \"run\": \"echo sha=${{ github.sha }}\" } ] } } }"
+    }
+  ]
+}
+---

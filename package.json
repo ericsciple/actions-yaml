@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp workflows/workflow-schema.json dist/workflows/",
     "format": "prettier --write '**/*.ts' '**/*js'",
     "format-check": "prettier --check '**/*.ts' '**/*.js'",
     "lint": "eslint **/*.ts",
