@@ -9,7 +9,7 @@ import {
   StringToken,
 } from "./tokens"
 
-import { EventType, ParseEvent } from './parse-event'
+import { EventType, ParseEvent } from "./parse-event"
 
 export class JSONObjectReader implements ObjectReader {
   private readonly _fileId: number | undefined
