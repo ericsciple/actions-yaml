@@ -1,7 +1,7 @@
 {
   "batchId": "1",
   "log": "Evaluating: fromJson(needs.compute-matrix.outputs.arch-array)\nResult: Array\nEvaluating: fromJson(needs.compute-matrix.outputs.os-array)\nResult: Array",
-  "result": {
+  "value": {
     "type": 2,
     "map": [
       {
@@ -54,6 +54,7 @@
         }
       }
     ]
-  }
+  },
+  "errors": []
 }
 ---

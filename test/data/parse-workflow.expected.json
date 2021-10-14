@@ -1,7 +1,7 @@
 {
   "batchId": "1",
   "log": "",
-  "result": {
+  "value": {
     "type": 2,
     "map": [
       {
@@ -63,13 +63,14 @@
         }
       }
     ]
-  }
+  },
+  "errors": []
 }
 ---
 {
   "batchId": "2",
   "log": "",
-  "result": {
+  "value": {
     "type": 2,
     "map": [
       {
@@ -131,13 +132,14 @@
         }
       }
     ]
-  }
+  },
+  "errors": []
 }
 ---
 {
   "batchId": "3",
   "log": "",
-  "result": {
+  "value": {
     "type": 2,
     "map": [
       {
@@ -246,6 +248,7 @@
         }
       }
     ]
-  }
+  },
+  "errors": []
 }
 ---

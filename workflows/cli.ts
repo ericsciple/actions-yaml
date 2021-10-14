@@ -5,6 +5,7 @@ import yargs from "yargs/yargs"
 import { evaluateStrategy } from "./workflow-evaluator"
 import { ContextData, DictionaryContextData } from "../expressions/context-data"
 import { TemplateToken } from "../templates/tokens"
+import { TemplateValidationError } from "../templates/template-context"
 
 interface Input {
   batchId: string | null | undefined
@@ -25,9 +26,8 @@ interface EvaluateStrategyInput extends Input {
 interface Output {
   batchId: string | undefined
   log: string
-  result: any
-  errorMessage: string
-  errorCode: string
+  value: any
+  errors: TemplateValidationError[]
 }
 
 const args = yargs(process.argv.slice(2))
@@ -56,24 +56,24 @@ function execute(input: Input): void {
     verbose: (x) => {},
     error: (x) => log.push(x),
   }
-  let result: any = undefined
-  let errorMessage: string | undefined
-  let errorStack: string | undefined
-  let errorCode: string | undefined
+  let value: any = undefined
+  let errors: TemplateValidationError[]
   try {
     switch (input.command) {
       case "parse-workflow": {
         const parseWorkflowInput = input as ParseWorkflowInput
-        result = parseWorkflow(
+        const result = parseWorkflow(
           parseWorkflowInput.entryFileId,
           parseWorkflowInput.files,
           trace
         )
+        value = result.value
+        errors = result.errors
         break
       }
       case "evaluate-strategy": {
         const evaluateStrategyInput = input as EvaluateStrategyInput
-        result = evaluateStrategy(
+        const result = evaluateStrategy(
           evaluateStrategyInput.files,
           ContextData.fromDeserializedContextData(
             evaluateStrategyInput.context
@@ -83,23 +83,26 @@ function execute(input: Input): void {
           ),
           trace
         )
+        value = result.value
+        errors = result.errors
         break
       }
       default:
         throw new Error(`Unsupported command '${input.command}'`)
     }
   } catch (err) {
-    errorMessage = (err as any).message ?? `${err}`
-    errorStack = `${(err as any).stack}`
-    errorCode = (err as any).code
+    const message = (err as any).message ?? `${err}`
+    const code = (err as any).code
+    const stack = `${(err as any).stack}`
+    const error = new TemplateValidationError(message, code)
+    ;(error as any).stack = stack
+    errors = [error]
   }
   const output = <Output>{
     batchId: input.batchId ?? undefined,
     log: log.join("\n"),
-    result: result,
-    errorMessage: errorMessage,
-    errorStack: errorStack,
-    errorCode: errorCode,
+    value: value,
+    errors: errors,
   }
   console.log(JSON.stringify(output, undefined, pretty ? "  " : undefined))
   console.log("---")

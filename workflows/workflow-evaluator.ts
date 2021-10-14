@@ -4,6 +4,7 @@ import * as templateEvaluator from "../templates/template-evaluator"
 import { STRATEGY, WORKFLOW_ROOT } from "./workflow-constants"
 import {
   TemplateContext,
+  TemplateValidationError,
   TemplateValidationErrors,
 } from "../templates/template-context"
 import { TemplateMemory } from "../templates/template-memory"
@@ -12,12 +13,17 @@ import { getWorkflowSchema } from "./workflow-schema"
 import { SimpleNamedContextNode } from "../expressions/nodes"
 import { NamedContextInfo } from "../expressions/parser"
 
+export interface EvaluateWorkflowResult {
+  value: TemplateToken | undefined
+  errors: TemplateValidationError[]
+}
+
 export function evaluateStrategy(
   files: string[],
   context: DictionaryContextData,
   token: TemplateToken,
   trace: TraceWriter
-): TemplateToken {
+): EvaluateWorkflowResult {
   const templateContext = new TemplateContext(
     new TemplateValidationErrors(),
     new TemplateMemory(50, 1048576),
@@ -38,13 +44,15 @@ export function evaluateStrategy(
     })
   }
 
-  const result = templateEvaluator.evaluateTemplate(
+  const value = templateEvaluator.evaluateTemplate(
     templateContext,
     STRATEGY,
     token,
     0,
     undefined
   )
-  templateContext.errors.check()
-  return result!
+  return <EvaluateWorkflowResult>{
+    value: value,
+    errors: templateContext.errors.getErrors(),
+  }
 }

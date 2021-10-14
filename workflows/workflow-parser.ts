@@ -5,17 +5,23 @@ import { WORKFLOW_ROOT } from "./workflow-constants"
 import { JSONObjectReader } from "../templates/json-object-reader"
 import {
   TemplateContext,
+  TemplateValidationError,
   TemplateValidationErrors,
 } from "../templates/template-context"
 import { TemplateMemory } from "../templates/template-memory"
 import { File } from "./file"
 import { getWorkflowSchema } from "./workflow-schema"
 
+export interface ParseWorkflowResult {
+  value: TemplateToken | undefined
+  errors: TemplateValidationError[]
+}
+
 export function parseWorkflow(
   entryFileId: string,
   files: File[],
   trace: TraceWriter
-): TemplateToken {
+): ParseWorkflowResult {
   const context = new TemplateContext(
     new TemplateValidationErrors(),
     new TemplateMemory(50, 1048576),
@@ -33,6 +39,8 @@ export function parseWorkflow(
     new JSONObjectReader(undefined, file.content),
     undefined
   )
-  context.errors.check()
-  return result.value
+  return <ParseWorkflowResult>{
+    value: result.value,
+    errors: context.errors.getErrors(),
+  }
 }
