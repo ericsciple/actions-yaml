@@ -31,7 +31,7 @@ export function parseWorkflow(
   const result = templateReader.readTemplate(
     context,
     WORKFLOW_ROOT,
-    new JSONObjectReader(undefined, file.content),
+    new YamlObjectReader(undefined, file.content),
     undefined
   )
   context.errors.check()

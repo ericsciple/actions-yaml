@@ -27,9 +27,9 @@ export class YamlObjectReader implements ObjectReader {
 
         if (isCollection(node)) {
             if (isSeq(node)) {
-                yield new ParseEvent(EventType.SequenceStart)
+                yield new ParseEvent(EventType.SequenceStart, new SequenceToken(this.fileId, undefined, undefined))
             } else if (isMap(node)) {
-                yield new ParseEvent(EventType.MappingStart)
+                yield new ParseEvent(EventType.MappingStart, new MappingToken(this.fileId, undefined, undefined))
             }
 
             for (const item of node.items) {
@@ -49,7 +49,9 @@ export class YamlObjectReader implements ObjectReader {
         }
 
         if (isPair(node)) {
-            // do I need to emit for the key? Or just the values? 
+            var scalarKey = node.key as Scalar
+            const key = scalarKey.value as string
+            yield new ParseEvent(EventType.Literal, new StringToken(this.fileId, undefined, undefined, key))
             for (const child of this.getNodes(node.value)) {
                 yield child
             }
@@ -156,6 +158,10 @@ export class YamlObjectReader implements ObjectReader {
     }
 
     public validateStart(): void {
+        if (!this._current) {
+            this._current = this._generator.next()
+        }
+
         if (!this._current.done) {
             const parseEvent = this._current.value as ParseEvent
             if (parseEvent.type === EventType.DocumentStart) {

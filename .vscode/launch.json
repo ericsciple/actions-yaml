@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Node",
-            "program": "${workspaceFolder}/workflows/yaml-object-reader.ts",
+            "program": "${workspaceFolder}/workflows/workflow-parser.ts",
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
