@@ -17,6 +17,7 @@
   "files": [
     {
       "id": ".github/workflows/ci.yml",
+<<<<<<< HEAD:test/data/parse-workflow.input.json
       "content": "{{WORKFLOW_PARSER_BATCH_2}}"
     }
   ]
@@ -30,6 +31,9 @@
     {
       "id": ".github/workflows/ci.yml",
       "content": "{{WORKFLOW_PARSER_BATCH_3}}"
+=======
+      "content": "{ \"jobs\": \"val\" }"
+>>>>>>> acf5623 (WIP):test/workflow-parser-input.json
     }
   ]
 }

@@ -7,8 +7,9 @@ import {
   ObjectReader,
   SequenceToken,
   StringToken,
-  TemplateToken,
 } from "./tokens"
+
+import { EventType, ParseEvent } from './parse-event'
 
 export class JSONObjectReader implements ObjectReader {
   private readonly _fileId: number | undefined
@@ -199,23 +200,4 @@ export class JSONObjectReader implements ObjectReader {
       yield new ParseEvent(EventType.DocumentEnd, undefined)
     }
   }
-}
-
-class ParseEvent {
-  public readonly type: EventType
-  public readonly token: TemplateToken | undefined
-  public constructor(type: EventType, token: TemplateToken | undefined) {
-    this.type = type
-    this.token = token
-  }
-}
-
-enum EventType {
-  Literal,
-  SequenceStart,
-  SequenceEnd,
-  MappingStart,
-  MappingEnd,
-  DocumentStart,
-  DocumentEnd,
 }

@@ -1,116 +1,170 @@
 import fs from "fs"
-import { isCollection, isDocument, isMap, isPair, isScalar, ParsedNode, parseDocument, Pair, Lexer } from "yaml"
 import path from "path"
-import { NodeBase } from "yaml/dist/nodes/Node"
-import { ObjectReader } from '../templates/tokens'
+import { isCollection, isDocument, isMap, isPair, isScalar, isSeq, ParsedNode, parseDocument, Pair, Lexer, Scalar } from "yaml"
+import { BooleanToken, NullToken, NumberToken, ObjectReader, StringToken, LiteralToken, SequenceToken, MappingToken } from '../templates/tokens'
+import { ParseEvent, EventType } from '../templates/parse-event'
 
-class YamlObjectReader implements ObjectReader {
+export class YamlObjectReader implements ObjectReader {
 
-    private readonly generator: Generator<NodeBase>
-    private currentNode: IteratorResult<NodeBase>
-    private previousNode?: IteratorResult<NodeBase>
+    private readonly _generator: Generator<ParseEvent>
+    private _current!: IteratorResult<ParseEvent>
+    private fileId?: number
 
-
-    constructor(filePath: string) {
-        const file = fs.readFileSync(path.resolve(__dirname, filePath), "utf-8")
-        this.generator = YamlObjectReader.getNodes(parseDocument(file))
-        this.currentNode = this.generator.next() // document node
+    constructor(fileId: number | undefined, content: string) {
+        this._generator = this.getNodes(parseDocument(content))
+        this.fileId = fileId
     }
 
-    private static *getNodes(node: unknown): Generator<NodeBase, void> {
+    private *getNodes(node: unknown): Generator<ParseEvent, void> {
 
         if (isDocument(node)) {
-            for (const item of YamlObjectReader.getNodes(node.contents)) {
+            yield new ParseEvent(EventType.DocumentStart)
+            for (const item of this.getNodes(node.contents)) {
                 yield item
             }
+            yield new ParseEvent(EventType.DocumentEnd)
         }
 
         if (isCollection(node)) {
-            // yield new SequenceStart()
+            if (isSeq(node)) {
+                yield new ParseEvent(EventType.SequenceStart)
+            } else if (isMap(node)) {
+                yield new ParseEvent(EventType.MappingStart)
+            }
+
             for (const item of node.items) {
-                for (const child of YamlObjectReader.getNodes(item)) {
+                for (const child of this.getNodes(item)) {
                     yield child
                 }
             }
-
-            // yield SequenceTo
+            if (isSeq(node)) {
+                yield new ParseEvent(EventType.SequenceEnd)
+            } else if (isMap(node)) {
+                yield new ParseEvent(EventType.MappingEnd)
+            }
         }
 
         if (isScalar(node)) {
-            yield node
+            yield new ParseEvent(EventType.Literal, YamlObjectReader.getLiteralToken(this.fileId, node as Scalar))
         }
 
         if (isPair(node)) {
-            yield node
-            for (const child of YamlObjectReader.getNodes(node.value)) {
+            // do I need to emit for the key? Or just the values? 
+            for (const child of this.getNodes(node.value)) {
                 yield child
             }
         }
     }
 
-    public nextNode(): NodeBase {
-        this.previousNode = this.currentNode
-        this.currentNode = this.generator.next()
-        return this.currentNode.value
+    private static getLiteralToken(fileId: number | undefined, token: Scalar) {
+        var value = token.value
+
+        if (!value) {
+            return new NullToken(fileId, undefined, undefined)
+        }
+
+        switch (typeof value) {
+            case "number":
+                return new NumberToken(fileId, undefined, undefined, value)
+            case "boolean":
+                return new BooleanToken(fileId, undefined, undefined, value)
+            case "string":
+                return new StringToken(fileId, undefined, undefined, value)
+            default:
+                throw new Error(
+                    `Unexpected value type '${typeof value}' when reading object`
+                )
+        }
     }
 
-    allowLiteral() {
-        if (!this.currentNode.done) {
-            if (isScalar(this.currentNode.value)) {
-                const value = this.currentNode.value;
-
+    public allowLiteral(): LiteralToken | undefined {
+        if (!this._current.done) {
+            const parseEvent = this._current.value
+            if (parseEvent.type === EventType.Literal) {
+                this._current = this._generator.next()
+                // console.log("ParseEvent=Literal")
+                return parseEvent.token as LiteralToken
             }
         }
 
         return undefined
-
-
-
-
-
     }
 
-    allowSequenceStart() {
+    public allowSequenceStart(): SequenceToken | undefined {
+        if (!this._current.done) {
+            const parseEvent = this._current.value
+            if (parseEvent.type === EventType.SequenceStart) {
+                this._current = this._generator.next()
+                // console.log("ParseEvent=SequenceStart")
+                return parseEvent.token as SequenceToken
+            }
+        }
+
         return undefined
     }
 
-    allowSequenceEnd() {
-        return true
+    public allowSequenceEnd(): boolean {
+        if (!this._current.done) {
+            const parseEvent = this._current.value
+            if (parseEvent.type === EventType.SequenceEnd) {
+                this._current = this._generator.next()
+                // console.log("ParseEvent=SequenceEnd")
+                return true
+            }
+        }
+
+        return false
     }
 
-    allowMappingStart() {
+    public allowMappingStart(): MappingToken | undefined {
+        if (!this._current.done) {
+            const parseEvent = this._current.value
+            if (parseEvent.type === EventType.MappingStart) {
+                this._current = this._generator.next()
+                // console.log("ParseEvent=MappingStart")
+                return parseEvent.token as MappingToken
+            }
+        }
+
         return undefined
     }
 
-    allowMappingEnd() {
-        return true
+    public allowMappingEnd(): boolean {
+        if (!this._current.done) {
+            const parseEvent = this._current.value
+            if (parseEvent.type === EventType.MappingEnd) {
+                this._current = this._generator.next()
+                // console.log("ParseEvent=MappingEnd")
+                return true
+            }
+        }
+
+        return false
     }
 
-    validateStart() {
+    public validateEnd(): void {
+        if (!this._current.done) {
+            const parseEvent = this._current.value as ParseEvent
+            if (parseEvent.type === EventType.DocumentEnd) {
+                this._current = this._generator.next()
+                // console.log("ParseEvent=DocumentEnd")
+                return
+            }
+        }
 
+        throw new Error("Expected end of reader")
     }
 
-    validateEnd() {
+    public validateStart(): void {
+        if (!this._current.done) {
+            const parseEvent = this._current.value as ParseEvent
+            if (parseEvent.type === EventType.DocumentStart) {
+                this._current = this._generator.next()
+                // console.log("ParseEvent=DocumentStart")
+                return
+            }
+        }
 
+        throw new Error("Expected start of reader")
     }
 }
-
-var yamlReader = new YamlObjectReader("file.yml")
-const file = fs.readFileSync(path.resolve(__dirname, "file.yml"), "utf-8")
-
-var lexer = new Lexer();
-for (const token of lexer.lex(file)) {
-    console.log(JSON.stringify(token))
-}
-
-for (var i = 0; i < 25; i++) {
-    console.log(JSON.stringify(yamlReader.nextNode()))
-}
-
-
-
-
-
-
-
-console.log()

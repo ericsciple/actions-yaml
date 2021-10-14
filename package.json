@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/ericsciple/actions-yaml#readme",
   "dependencies": {
-    "yargs": "^17.2",
-    "yaml": "2.0.0-8"
+    "yaml": "^2.0.0-8",
+    "yargs": "^17.2"
   },
   "devDependencies": {
     "@types/node": "^12.20.27",

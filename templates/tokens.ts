@@ -386,9 +386,15 @@ export abstract class LiteralToken extends ScalarToken {
 
 export class NullToken extends LiteralToken implements NullCompatible {
   public constructor(
+<<<<<<< HEAD
     file: number | undefined,
     line: number | undefined,
     col: number | undefined
+=======
+    fileId?: number | undefined,
+    line?: number | undefined,
+    col?: number | undefined
+>>>>>>> acf5623 (WIP)
   ) {
     super(NULL_TYPE, file, line, col)
   }
