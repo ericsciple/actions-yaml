@@ -77,7 +77,7 @@ export class YamlObjectReader implements ObjectReader {
     }
 
     if (isPair(node)) {
-      var scalarKey = node.key as Scalar
+      const scalarKey = node.key as Scalar
       const key = scalarKey.value as string
       yield new ParseEvent(
         EventType.Literal,
@@ -90,7 +90,7 @@ export class YamlObjectReader implements ObjectReader {
   }
 
   private static getLiteralToken(fileId: number | undefined, token: Scalar) {
-    var value = token.value
+    const value = token.value
 
     if (!value) {
       return new NullToken(fileId, undefined, undefined)
