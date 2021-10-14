@@ -2,7 +2,6 @@
   "name": "actions-yaml",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "build": "tsc && cp workflows/workflow-schema.json dist/workflows/",
     "format": "prettier --write '**/*.ts' '**/*js'",
@@ -24,6 +23,7 @@
   },
   "homepage": "https://github.com/ericsciple/actions-yaml#readme",
   "dependencies": {
+    "yaml": "^2.0.0-8",
     "yargs": "^17.2"
   },
   "devDependencies": {

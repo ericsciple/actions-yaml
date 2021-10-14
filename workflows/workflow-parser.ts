@@ -3,6 +3,7 @@ import { TraceWriter } from "../templates/trace-writer"
 import * as templateReader from "../templates/template-reader"
 import { WORKFLOW_ROOT } from "./workflow-constants"
 import { JSONObjectReader } from "../templates/json-object-reader"
+import { YamlObjectReader } from "./yaml-object-reader"
 import {
   TemplateContext,
   TemplateValidationErrors,
@@ -30,7 +31,7 @@ export function parseWorkflow(
   const result = templateReader.readTemplate(
     context,
     WORKFLOW_ROOT,
-    new JSONObjectReader(undefined, file.content),
+    new YamlObjectReader(undefined, file.content),
     undefined
   )
   context.errors.check()
