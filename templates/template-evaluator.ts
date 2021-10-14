@@ -191,7 +191,7 @@ class TemplateEvaluator {
         nextKeyScalar.templateTokenType === STRING_TYPE
           ? (nextKeyScalar as StringToken)
           : new StringToken(
-              nextKeyScalar.fileId,
+              nextKeyScalar.file,
               nextKeyScalar.line,
               nextKeyScalar.col,
               nextKeyScalar.toString()
@@ -309,7 +309,7 @@ class TemplateEvaluator {
         nextKeyScalar.templateTokenType === STRING_TYPE
           ? (nextKeyScalar as StringToken)
           : new StringToken(
-              nextKeyScalar.fileId,
+              nextKeyScalar.file,
               nextKeyScalar.line,
               nextKeyScalar.col,
               nextKeyScalar.toString()
@@ -348,7 +348,7 @@ class TemplateEvaluator {
     // Not a string, convert
     if (literal.templateTokenType !== STRING_TYPE) {
       const stringLiteral = new StringToken(
-        literal.fileId,
+        literal.file,
         literal.line,
         literal.col,
         literal.toString()

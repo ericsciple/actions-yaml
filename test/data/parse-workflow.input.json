@@ -5,7 +5,7 @@
   "files": [
     {
       "id": ".github/workflows/ci.yml",
-      "content": "${BATCH_1_FILE_1}"
+      "content": "{{WORKFLOW_PARSER_BATCH_1}}"
     }
   ]
 }
@@ -17,7 +17,19 @@
   "files": [
     {
       "id": ".github/workflows/ci.yml",
-      "content": "${BATCH_2_FILE_1}"
+      "content": "{{WORKFLOW_PARSER_BATCH_2}}"
+    }
+  ]
+}
+---
+{
+  "batchId": "3",
+  "command": "parse-workflow",
+  "entryFileId": ".github/workflows/ci.yml",
+  "files": [
+    {
+      "id": ".github/workflows/ci.yml",
+      "content": "{{WORKFLOW_PARSER_BATCH_3}}"
     }
   ]
 }

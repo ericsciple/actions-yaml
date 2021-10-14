@@ -73,7 +73,7 @@ export class TemplateUnraveler {
       (this._current as SequenceState).isStart
     ) {
       const sequence = new SequenceToken(
-        this._current.value.fileId,
+        this._current.value.file,
         this._current.value.line,
         this._current.value.col
       )
@@ -114,7 +114,7 @@ export class TemplateUnraveler {
       (this._current as MappingState).isStart
     ) {
       const mapping = new MappingToken(
-        this._current.value.fileId,
+        this._current.value.file,
         this._current.value.line,
         this._current.value.col
       )
@@ -147,14 +147,18 @@ export class TemplateUnraveler {
 
   public readEnd(): void {
     if (this._current !== undefined) {
-      throw new Error(`Expected end of template object. ${this.dumpState()}`)
+      throw new Error(
+        `Expected end of template object. ${this.dumpState("readEnd")}`
+      )
     }
   }
 
   public readMappingEnd(): void {
     if (!this.allowMappingEnd(false)) {
       throw new Error(
-        `Unexpected state while attempting to read the mapping end. ${this.dumpState()}`
+        `Unexpected state while attempting to read the mapping end. ${this.dumpState(
+          "readMappingEnd"
+        )}`
       )
     }
   }
@@ -162,7 +166,9 @@ export class TemplateUnraveler {
   public skipSequenceItem(): void {
     if (this._current?.parent?.value.templateTokenType !== SEQUENCE_TYPE) {
       throw new Error(
-        `Unexpected state while attempting to skip the current sequence item. ${this.dumpState()}`
+        `Unexpected state while attempting to skip the current sequence item. ${this.dumpState(
+          "skipSequenceItem"
+        )}`
       )
     }
 
@@ -175,7 +181,9 @@ export class TemplateUnraveler {
       !(this._current.parent as MappingState).isKey
     ) {
       throw new Error(
-        `Unexpected state while attempting to skip the current mapping key. ${this.dumpState()}`
+        `Unexpected state while attempting to skip the current mapping key. ${this.dumpState(
+          "skipMappingKey"
+        )}`
       )
     }
 
@@ -188,15 +196,21 @@ export class TemplateUnraveler {
       (this._current.parent as MappingState).isKey
     ) {
       throw new Error(
-        `Unexpected state while attempting to skip the current mapping value. ${this.dumpState()}`
+        `Unexpected state while attempting to skip the current mapping value. ${this.dumpState(
+          "skipMappingValue"
+        )}`
       )
     }
 
     this.moveNext(true)
   }
 
-  private dumpState(): string {
+  private dumpState(operation: string): string {
     const result: string[] = []
+
+    if (operation) {
+      result.push(`Operation: ${operation}`)
+    }
 
     if (this._current === undefined) {
       result.push(`State: (null)`)
@@ -375,7 +389,7 @@ export class TemplateUnraveler {
         else if (basicExpressionState.isEnd) {
           this.endExpression()
         } else {
-          this.unexpectedState()
+          this.unexpectedState("unravel basic expression")
         }
       }
       // Mapping
@@ -399,7 +413,7 @@ export class TemplateUnraveler {
         else if (mappingState.isEnd) {
           break
         } else {
-          this.unexpectedState()
+          this.unexpectedState("unravel mapping")
         }
       }
       // Sequence
@@ -424,7 +438,7 @@ export class TemplateUnraveler {
         else if (sequenceState.isEnd) {
           break
         } else {
-          this.unexpectedState()
+          this.unexpectedState("unravel sequence")
         }
       }
       // Insert expression
@@ -462,10 +476,10 @@ export class TemplateUnraveler {
           this._current.remove()
           this._current = insertExpressionState.toStringToken()
         } else {
-          this.unexpectedState()
+          this.unexpectedState("unravel insert expression")
         }
       } else {
-        this.unexpectedState()
+        this.unexpectedState("unravel")
       }
     }
 
@@ -583,7 +597,7 @@ export class TemplateUnraveler {
     } catch (err) {
       this._context.error(expression, err)
       value = new StringToken(
-        expression.fileId,
+        expression.file,
         expression.line,
         expression.col,
         ""
@@ -614,7 +628,7 @@ export class TemplateUnraveler {
     } catch (err) {
       this._context.error(expression, err)
       value = new StringToken(
-        expression.fileId,
+        expression.file,
         expression.line,
         expression.col,
         ""
@@ -720,9 +734,11 @@ export class TemplateUnraveler {
     }
   }
 
-  private unexpectedState(): void {
+  private unexpectedState(operation: string): void {
     throw new Error(
-      `Unexpected state while unraveling expressions. ${this.dumpState()}`
+      `Unexpected state while unraveling expressions. ${this.dumpState(
+        operation
+      )}`
     )
   }
 }
@@ -1067,7 +1083,7 @@ class BasicExpressionState extends ReaderState {
     // Create the nested state
     const nestedState = ReaderState.createState(
       this,
-      this.value,
+      value,
       this.context,
       removeBytes
     )
@@ -1158,7 +1174,7 @@ class InsertExpressionState extends ReaderState {
    */
   public toStringToken(): ReaderState {
     const literal = new StringToken(
-      this.value.fileId,
+      this.value.file,
       this.value.line,
       this.value.col,
       `${OPEN_EXPRESSION} ${this.expression.directive} ${CLOSE_EXPRESSION}`

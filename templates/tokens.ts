@@ -70,7 +70,7 @@ export interface ObjectReader {
 export abstract class TemplateToken {
   // Fields for serialization
   private readonly type: number
-  public readonly fileId: number | undefined
+  public readonly file: number | undefined
   public readonly line: number | undefined
   public readonly col: number | undefined
 
@@ -79,12 +79,12 @@ export abstract class TemplateToken {
    */
   public constructor(
     type: number,
-    fileId: number | undefined,
+    file: number | undefined,
     line: number | undefined,
     col: number | undefined
   ) {
     this.type = type
-    this.fileId = fileId
+    this.file = file
     this.line = line
     this.col = col
   }
@@ -193,6 +193,89 @@ export abstract class TemplateToken {
   }
 
   /**
+   * Converts to TemplateToken from serialized Template that has already been JSON-parsed into regular JavaScript objects.
+   */
+  public static fromDeserializedTemplateToken(object: any): TemplateToken {
+    switch (typeof object) {
+      case "boolean":
+        return new BooleanToken(
+          undefined,
+          undefined,
+          undefined,
+          object as boolean
+        )
+      case "number":
+        return new NumberToken(
+          undefined,
+          undefined,
+          undefined,
+          object as number
+        )
+      case "string":
+        return new StringToken(
+          undefined,
+          undefined,
+          undefined,
+          object as string
+        )
+      case "object": {
+        if (object === null) {
+          return new NullToken(undefined, undefined, undefined)
+        }
+
+        const type = (object.type as number | undefined) ?? STRING_TYPE
+        const file = object.file as number | undefined
+        const line = object.line as number | undefined
+        const col = object.col as number | undefined
+        switch (type) {
+          case NULL_TYPE:
+            return new NullToken(file, line, col)
+          case BOOLEAN_TYPE: {
+            return new BooleanToken(file, line, col, object.bool ?? false)
+          }
+          case NUMBER_TYPE: {
+            return new NumberToken(file, line, col, object.num ?? 0)
+          }
+          case STRING_TYPE: {
+            return new StringToken(file, line, col, object.lit ?? "")
+          }
+          case SEQUENCE_TYPE: {
+            const sequence = new SequenceToken(file, line, col)
+            for (const item of object.seq ?? []) {
+              sequence.add(TemplateToken.fromDeserializedTemplateToken(item))
+            }
+            return sequence
+          }
+          case MAPPING_TYPE: {
+            const mapping = new MappingToken(file, line, col)
+            for (const pair of object.map ?? []) {
+              mapping.add(
+                TemplateToken.fromDeserializedTemplateToken(
+                  pair.key
+                ) as ScalarToken,
+                TemplateToken.fromDeserializedTemplateToken(pair.value)
+              )
+            }
+            return mapping
+          }
+          case BASIC_EXPRESSION_TYPE:
+            return new BasicExpressionToken(file, line, col, object.expr ?? "")
+          case INSERT_EXPRESSION_TYPE:
+            return new InsertExpressionToken(file, line, col)
+          default:
+            throw new Error(
+              `Unexpected type '${type}' when converting deserialized template token to template token`
+            )
+        }
+      }
+      default:
+        throw new Error(
+          `Unexpected type '${typeof object}' when converting deserialized template token to template token`
+        )
+    }
+  }
+
+  /**
    * Returns all tokens (depth first)
    * @param value The object to travese
    * @param omitKeys Whether to omit mapping keys
@@ -236,11 +319,11 @@ export abstract class TemplateToken {
 export abstract class ScalarToken extends TemplateToken {
   public constructor(
     type: number,
-    fileId: number | undefined,
+    file: number | undefined,
     line: number | undefined,
     col: number | undefined
   ) {
-    super(type, fileId, line, col)
+    super(type, file, line, col)
   }
 
   public abstract toString(): string
@@ -271,11 +354,11 @@ export abstract class ScalarToken extends TemplateToken {
 export abstract class LiteralToken extends ScalarToken {
   public constructor(
     type: number,
-    fileId: number | undefined,
+    file: number | undefined,
     line: number | undefined,
     col: number | undefined
   ) {
-    super(type, fileId, line, col)
+    super(type, file, line, col)
   }
 
   public override get isLiteral(): boolean {
@@ -302,11 +385,11 @@ export abstract class LiteralToken extends ScalarToken {
 
 export class NullToken extends LiteralToken implements NullCompatible {
   public constructor(
-    fileId: number | undefined,
+    file: number | undefined,
     line: number | undefined,
     col: number | undefined
   ) {
-    super(NULL_TYPE, fileId, line, col)
+    super(NULL_TYPE, file, line, col)
   }
 
   public get compatibleValueKind(): ValueKind {
@@ -316,7 +399,7 @@ export class NullToken extends LiteralToken implements NullCompatible {
   public override clone(omitSource?: boolean): TemplateToken {
     return omitSource
       ? new NullToken(undefined, undefined, undefined)
-      : new NullToken(this.fileId, this.line, this.col)
+      : new NullToken(this.file, this.line, this.col)
   }
 
   public override toString(): string {
@@ -328,12 +411,12 @@ export class BooleanToken extends LiteralToken implements BooleanCompatible {
   private readonly bool: boolean
 
   public constructor(
-    fileId: number | undefined,
+    file: number | undefined,
     line: number | undefined,
     col: number | undefined,
     value: boolean
   ) {
-    super(BOOLEAN_TYPE, fileId, line, col)
+    super(BOOLEAN_TYPE, file, line, col)
     this.bool = value
   }
 
@@ -348,7 +431,7 @@ export class BooleanToken extends LiteralToken implements BooleanCompatible {
   public override clone(omitSource?: boolean): TemplateToken {
     return omitSource
       ? new BooleanToken(undefined, undefined, undefined, this.bool)
-      : new BooleanToken(this.fileId, this.line, this.col, this.bool)
+      : new BooleanToken(this.file, this.line, this.col, this.bool)
   }
 
   public override toString(): string {
@@ -367,12 +450,12 @@ export class NumberToken extends LiteralToken implements NumberCompatible {
   private readonly num: number
 
   public constructor(
-    fileId: number | undefined,
+    file: number | undefined,
     line: number | undefined,
     col: number | undefined,
     value: number
   ) {
-    super(NUMBER_TYPE, fileId, line, col)
+    super(NUMBER_TYPE, file, line, col)
     this.num = value
   }
 
@@ -387,7 +470,7 @@ export class NumberToken extends LiteralToken implements NumberCompatible {
   public override clone(omitSource?: boolean): TemplateToken {
     return omitSource
       ? new NumberToken(undefined, undefined, undefined, this.num)
-      : new NumberToken(this.fileId, this.line, this.col, this.num)
+      : new NumberToken(this.file, this.line, this.col, this.num)
   }
 
   public override toString(): string {
@@ -406,12 +489,12 @@ export class StringToken extends LiteralToken implements StringCompatible {
   private readonly lit: string
 
   public constructor(
-    fileId: number | undefined,
+    file: number | undefined,
     line: number | undefined,
     col: number | undefined,
     value: string
   ) {
-    super(STRING_TYPE, fileId, line, col)
+    super(STRING_TYPE, file, line, col)
     this.lit = value
   }
 
@@ -426,7 +509,7 @@ export class StringToken extends LiteralToken implements StringCompatible {
   public override clone(omitSource?: boolean): TemplateToken {
     return omitSource
       ? new StringToken(undefined, undefined, undefined, this.lit)
-      : new StringToken(this.fileId, this.line, this.col, this.lit)
+      : new StringToken(this.file, this.line, this.col, this.lit)
   }
 
   public override toString(): string {
@@ -448,12 +531,12 @@ export abstract class ExpressionToken extends ScalarToken {
 
   public constructor(
     type: number,
-    fileId: number | undefined,
+    file: number | undefined,
     line: number | undefined,
     col: number | undefined,
     directive: string | undefined
   ) {
-    super(type, fileId, line, col)
+    super(type, file, line, col)
     this.directive = directive
   }
 
@@ -510,11 +593,11 @@ export class SequenceToken
   private readonly seq: TemplateToken[] = []
 
   public constructor(
-    fileId: number | undefined,
+    file: number | undefined,
     line: number | undefined,
     col: number | undefined
   ) {
-    super(SEQUENCE_TYPE, fileId, line, col)
+    super(SEQUENCE_TYPE, file, line, col)
   }
 
   public get count(): number {
@@ -551,7 +634,7 @@ export class SequenceToken
   public override clone(omitSource?: boolean): TemplateToken {
     const result = omitSource
       ? new SequenceToken(undefined, undefined, undefined)
-      : new SequenceToken(this.fileId, this.line, this.col)
+      : new SequenceToken(this.file, this.line, this.col)
     for (const item of this.seq) {
       result.add(item.clone(omitSource))
     }
@@ -590,11 +673,11 @@ export class MappingToken
   ) => void
 
   public constructor(
-    fileId: number | undefined,
+    file: number | undefined,
     line: number | undefined,
     col: number | undefined
   ) {
-    super(MAPPING_TYPE, fileId, line, col)
+    super(MAPPING_TYPE, file, line, col)
 
     this._getHiddenProperty = (
       propertyName: string,
@@ -652,7 +735,7 @@ export class MappingToken
   public override clone(omitSource?: boolean): TemplateToken {
     const result = omitSource
       ? new MappingToken(undefined, undefined, undefined)
-      : new MappingToken(this.fileId, this.line, this.col)
+      : new MappingToken(this.file, this.line, this.col)
     for (const item of this.map) {
       result.add(
         item.key.clone(omitSource) as ScalarToken,
@@ -759,12 +842,12 @@ export class BasicExpressionToken extends ExpressionToken {
   private readonly expr: string
 
   public constructor(
-    fileId: number | undefined,
+    file: number | undefined,
     line: number | undefined,
     col: number | undefined,
     expression: string
   ) {
-    super(BASIC_EXPRESSION_TYPE, fileId, line, col, undefined)
+    super(BASIC_EXPRESSION_TYPE, file, line, col, undefined)
     this.expr = expression
   }
 
@@ -775,7 +858,7 @@ export class BasicExpressionToken extends ExpressionToken {
   public override clone(omitSource?: boolean): TemplateToken {
     return omitSource
       ? new BasicExpressionToken(undefined, undefined, undefined, this.expr)
-      : new BasicExpressionToken(this.fileId, this.line, this.col, this.expr)
+      : new BasicExpressionToken(this.file, this.line, this.col, this.expr)
   }
 
   public override toString(): string {
@@ -982,11 +1065,11 @@ export class BasicExpressionToken extends ExpressionToken {
     let literal: LiteralToken | undefined
     switch (result.kind) {
       case ValueKind.Null:
-        literal = new NullToken(this.fileId, this.line, this.col)
+        literal = new NullToken(this.file, this.line, this.col)
         break
       case ValueKind.Boolean:
         literal = new BooleanToken(
-          this.fileId,
+          this.file,
           this.line,
           this.col,
           result.value as boolean
@@ -994,7 +1077,7 @@ export class BasicExpressionToken extends ExpressionToken {
         break
       case ValueKind.Number:
         literal = new NumberToken(
-          this.fileId,
+          this.file,
           this.line,
           this.col,
           result.value as number
@@ -1002,7 +1085,7 @@ export class BasicExpressionToken extends ExpressionToken {
         break
       case ValueKind.String:
         literal = new StringToken(
-          this.fileId,
+          this.file,
           this.line,
           this.col,
           result.value as string
@@ -1021,19 +1104,19 @@ export class BasicExpressionToken extends ExpressionToken {
     context: TemplateContext,
     value: string
   ): StringToken {
-    const result = new StringToken(this.fileId, this.line, this.col, value)
+    const result = new StringToken(this.file, this.line, this.col, value)
     context.memory.addToken(result, false)
     return result
   }
 
   private createSequenceToken(context: TemplateContext): SequenceToken {
-    const result = new SequenceToken(this.fileId, this.line, this.col)
+    const result = new SequenceToken(this.file, this.line, this.col)
     context.memory.addToken(result, false)
     return result
   }
 
   private createMappingToken(context: TemplateContext): MappingToken {
-    const result = new MappingToken(this.fileId, this.line, this.col)
+    const result = new MappingToken(this.file, this.line, this.col)
     context.memory.addToken(result, false)
     return result
   }
@@ -1062,17 +1145,17 @@ export class BasicExpressionToken extends ExpressionToken {
 
 export class InsertExpressionToken extends ExpressionToken {
   public constructor(
-    fileId: number | undefined,
+    file: number | undefined,
     line: number | undefined,
     col: number | undefined
   ) {
-    super(INSERT_EXPRESSION_TYPE, fileId, line, col, INSERT_DIRECTIVE)
+    super(INSERT_EXPRESSION_TYPE, file, line, col, INSERT_DIRECTIVE)
   }
 
   public override clone(omitSource?: boolean): TemplateToken {
     return omitSource
       ? new InsertExpressionToken(undefined, undefined, undefined)
-      : new InsertExpressionToken(this.fileId, this.line, this.col)
+      : new InsertExpressionToken(this.file, this.line, this.col)
   }
 
   public override toString(): string {

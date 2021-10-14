@@ -50,7 +50,7 @@ export class TemplateContext {
   ): void {
     const token = tokenOrFileId as TemplateToken | undefined
     const prefix = this.getErrorPrefix(
-      token?.fileId ?? (tokenOrFileId as number | undefined),
+      token?.file ?? (tokenOrFileId as number | undefined),
       token?.line,
       token?.col
     )
