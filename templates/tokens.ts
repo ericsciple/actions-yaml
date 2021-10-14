@@ -54,7 +54,7 @@ export const NULL_TYPE = 7
 export interface ObjectReader {
   allowLiteral(): LiteralToken | undefined
 
-// maybe rename these since we don't have out params
+  // maybe rename these since we don't have out params
   allowSequenceStart(): SequenceToken | undefined
 
   allowSequenceEnd(): boolean
