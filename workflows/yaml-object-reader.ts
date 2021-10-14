@@ -1,5 +1,3 @@
-import fs from "fs"
-import path from "path"
 import {
   isCollection,
   isDocument,
@@ -7,10 +5,7 @@ import {
   isPair,
   isScalar,
   isSeq,
-  ParsedNode,
   parseDocument,
-  Pair,
-  Lexer,
   Scalar,
   LineCounter,
 } from "yaml"
@@ -26,7 +21,6 @@ import {
 } from "../templates/tokens"
 import { ParseEvent, EventType } from "../templates/parse-event"
 import { NodeBase } from "yaml/dist/nodes/Node"
-import { start } from "repl"
 
 export class YamlObjectReader implements ObjectReader {
   private readonly _generator: Generator<ParseEvent>
@@ -91,7 +85,7 @@ export class YamlObjectReader implements ObjectReader {
     }
 
     if (isPair(node)) {
-      var scalarKey = node.key as Scalar
+      const scalarKey = node.key as Scalar
       const key = scalarKey.value as string
       yield new ParseEvent(
         EventType.Literal,
@@ -109,7 +103,7 @@ export class YamlObjectReader implements ObjectReader {
     col: number | undefined,
     token: Scalar
   ) {
-    var value = token.value
+    const value = token.value
 
     if (!value) {
       return new NullToken(fileId, line, col)
