@@ -2,6 +2,9 @@ import { parseWorkflow } from "./workflow-parser"
 import { TraceWriter } from "../templates/trace-writer"
 import { File } from "./file"
 import yargs from "yargs/yargs"
+import { evaluateStrategy } from "./workflow-evaluator"
+import { ContextData, DictionaryContextData } from "../expressions/context-data"
+import { TemplateToken } from "../templates/tokens"
 
 interface Input {
   batchId: string | null | undefined
@@ -11,6 +14,12 @@ interface Input {
 interface ParseWorkflowInput extends Input {
   entryFileId: string
   files: File[]
+}
+
+interface EvaluateStrategyInput extends Input {
+  files: string[]
+  context: any
+  token: any
 }
 
 interface Output {
@@ -58,6 +67,20 @@ function execute(input: Input): void {
         result = parseWorkflow(
           parseWorkflowInput.entryFileId,
           parseWorkflowInput.files,
+          trace
+        )
+        break
+      }
+      case "evaluate-strategy": {
+        const evaluateStrategyInput = input as EvaluateStrategyInput
+        result = evaluateStrategy(
+          evaluateStrategyInput.files,
+          ContextData.fromDeserializedContextData(
+            evaluateStrategyInput.context
+          ) as DictionaryContextData,
+          TemplateToken.fromDeserializedTemplateToken(
+            evaluateStrategyInput.token
+          ),
           trace
         )
         break

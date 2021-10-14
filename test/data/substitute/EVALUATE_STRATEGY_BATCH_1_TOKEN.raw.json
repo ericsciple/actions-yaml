@@ -1,0 +1,41 @@
+{
+  "type": 2,
+  "map": [
+    {
+      "key": {
+        "type": 0,
+        "lit": "matrix"
+      },
+      "value": {
+        "type": 2,
+        "map": [
+          {
+            "key": {
+              "type": 0,
+              "lit": "arch"
+            },
+            "value": {
+              "type": 3,
+              "expr": "fromJson(needs.compute-matrix.outputs.arch-array)"
+            }
+          },
+          {
+            "key": {
+              "type": 0,
+              "lit": "os"
+            },
+            "value": {
+              "type": 1,
+              "seq": [
+                {
+                  "type": 3,
+                  "expr": "fromJson(needs.compute-matrix.outputs.os-array)"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "jobs": {
+    "build": {
+      "strategy": {
+        "matrix": {
+          "arch": "${{ fromJson(needs.compute-matrix.outputs.arch-array) }}",
+          "os": [
+            "${{ fromJson(needs.compute-matrix.outputs.os-array) }}"
+          ]
+        }
+      },
+      "runs-on": "${{ matrix.os }}",
+      "steps": [
+        {
+          "run": "build ${{ matrix.arch }}"
+        }
+      ]
+    }
+  }
+}

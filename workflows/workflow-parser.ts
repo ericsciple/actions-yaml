@@ -8,29 +8,18 @@ import {
   TemplateValidationErrors,
 } from "../templates/template-context"
 import { TemplateMemory } from "../templates/template-memory"
-import { TemplateSchema } from "../templates/schema"
-import * as fs from "fs"
-import * as path from "path"
 import { File } from "./file"
-
-let schema: TemplateSchema
+import { getWorkflowSchema } from "./workflow-schema"
 
 export function parseWorkflow(
   entryFileId: string,
   files: File[],
   trace: TraceWriter
 ): TemplateToken {
-  if (schema === undefined) {
-    const json = fs
-      .readFileSync(path.join(__dirname, "workflow-schema.json"))
-      .toString()
-    schema = TemplateSchema.load(new JSONObjectReader(undefined, json))
-  }
-
   const context = new TemplateContext(
     new TemplateValidationErrors(),
     new TemplateMemory(50, 1048576),
-    schema,
+    getWorkflowSchema(),
     trace
   )
   const file = files.filter((x) => x.id === entryFileId)[0]

@@ -5,15 +5,17 @@ load '../node_modules/bats-assert/load'
 mkdir -p _temp
 
 @test "Expressions CLI" {
-  run node dist/expressions/cli.js --pretty <test/expressions-input.json
+  node dist/expressions/cli.js --pretty < test/data/expressions.input.json > _temp/expressions.actual.json
+  run node dist/expressions/cli.js --pretty < test/data/expressions.input.json
   assert_success
-  cat test/expressions.expected.json | assert_output -
+  cat test/data/expressions.expected.json | assert_output -
 }
 
 @test 'Templates CLI' {
-  run node dist/templates/cli.js --pretty <test/templates-input.json
+  node dist/templates/cli.js --pretty < test/data/templates.input.json > _temp/templates.actual.json
+  run node dist/templates/cli.js --pretty < test/data/templates.input.json
   assert_success
-  cat test/templates.expected.json | assert_output -
+  cat test/data/templates.expected.json | assert_output -
 }
 
 @test "Templates CLI with unknown flag" {
@@ -29,16 +31,23 @@ mkdir -p _temp
 }
 
 @test 'Templates CLI with --no-expand-expressions' {
-  run node dist/templates/cli.js --pretty --no-expand-expressions <test/templates-input.json
+  run node dist/templates/cli.js --pretty --no-expand-expressions <test/data/templates.input.json
   assert_success
-  cat test/templates.expected.json | assert_output -
+  cat test/data/templates.expected.json | assert_output -
 }
 
-@test 'Workflows CLI' {
-  export BATCH_1_FILE_1="$(test/json-encode.js test/workflow-parser-input.batch-1-file-1.yml)"
-  export BATCH_2_FILE_1="$(test/json-encode.js test/workflow-parser-input.batch-2-file-1.yml)"
-  cat test/workflow-parser-input.json | envsubst >_temp/workflow-parser-input.json
-  run node dist/workflows/cli.js --pretty <_temp/workflow-parser-input.json
+@test 'Parse workflow' {
+  test/substitute.js test/data/parse-workflow.input.json _temp/parse-workflow.input.json test/data/substitute/WORKFLOW_PARSER_*
+  node dist/workflows/cli.js --pretty < _temp/parse-workflow.input.json > _temp/parse-workflow.actual.json
+  run node dist/workflows/cli.js --pretty < _temp/parse-workflow.input.json
   assert_success
-  cat test/workflow-parser.expected.json | assert_output -
+  cat test/data/parse-workflow.expected.json | assert_output -
+}
+
+@test 'Evaluate strategy' {
+  test/substitute.js test/data/evaluate-strategy.input.json _temp/evaluate-strategy.input.json test/data/substitute/EVALUATE_STRATEGY_*
+  node dist/workflows/cli.js --pretty < _temp/evaluate-strategy.input.json > _temp/evaluate-strategy.actual.json
+  run node dist/workflows/cli.js --pretty < _temp/evaluate-strategy.input.json
+  assert_success
+  cat test/data/evaluate-strategy.expected.json | assert_output -
 }

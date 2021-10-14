@@ -1,0 +1,59 @@
+{
+  "batchId": "1",
+  "log": "Evaluating: fromJson(needs.compute-matrix.outputs.arch-array)\nResult: Array\nEvaluating: fromJson(needs.compute-matrix.outputs.os-array)\nResult: Array",
+  "result": {
+    "type": 2,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "lit": "matrix"
+        },
+        "value": {
+          "type": 2,
+          "map": [
+            {
+              "key": {
+                "type": 0,
+                "lit": "arch"
+              },
+              "value": {
+                "type": 1,
+                "seq": [
+                  {
+                    "type": 0,
+                    "lit": "x86"
+                  },
+                  {
+                    "type": 0,
+                    "lit": "x64"
+                  }
+                ]
+              }
+            },
+            {
+              "key": {
+                "type": 0,
+                "lit": "os"
+              },
+              "value": {
+                "type": 1,
+                "seq": [
+                  {
+                    "type": 0,
+                    "lit": "win"
+                  },
+                  {
+                    "type": 0,
+                    "lit": "linux"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+---
