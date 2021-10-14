@@ -12,6 +12,7 @@ import {
   Pair,
   Lexer,
   Scalar,
+  LineCounter,
 } from "yaml"
 import {
   BooleanToken,
@@ -24,18 +25,31 @@ import {
   MappingToken,
 } from "../templates/tokens"
 import { ParseEvent, EventType } from "../templates/parse-event"
+import { NodeBase } from "yaml/dist/nodes/Node"
+import { start } from "repl"
 
 export class YamlObjectReader implements ObjectReader {
   private readonly _generator: Generator<ParseEvent>
   private _current!: IteratorResult<ParseEvent>
   private fileId?: number
+  private lineCounter = new LineCounter()
 
   constructor(fileId: number | undefined, content: string) {
-    this._generator = this.getNodes(parseDocument(content))
+    this._generator = this.getNodes(
+      parseDocument(content.trim(), { lineCounter: this.lineCounter })
+    )
     this.fileId = fileId
   }
 
   private *getNodes(node: unknown): Generator<ParseEvent, void> {
+    const range = (node as NodeBase)?.range ?? []
+    const startPosition = range[0]
+
+    const { line, col } =
+      startPosition !== undefined
+        ? this.lineCounter.linePos(startPosition)
+        : { line: undefined, col: undefined }
+
     if (isDocument(node)) {
       yield new ParseEvent(EventType.DocumentStart)
       for (const item of this.getNodes(node.contents)) {
@@ -48,12 +62,12 @@ export class YamlObjectReader implements ObjectReader {
       if (isSeq(node)) {
         yield new ParseEvent(
           EventType.SequenceStart,
-          new SequenceToken(this.fileId, undefined, undefined)
+          new SequenceToken(this.fileId, line, col)
         )
       } else if (isMap(node)) {
         yield new ParseEvent(
           EventType.MappingStart,
-          new MappingToken(this.fileId, undefined, undefined)
+          new MappingToken(this.fileId, line, col)
         )
       }
 
@@ -72,16 +86,16 @@ export class YamlObjectReader implements ObjectReader {
     if (isScalar(node)) {
       yield new ParseEvent(
         EventType.Literal,
-        YamlObjectReader.getLiteralToken(this.fileId, node as Scalar)
+        YamlObjectReader.getLiteralToken(this.fileId, line, col, node as Scalar)
       )
     }
 
     if (isPair(node)) {
-      const scalarKey = node.key as Scalar
+      var scalarKey = node.key as Scalar
       const key = scalarKey.value as string
       yield new ParseEvent(
         EventType.Literal,
-        new StringToken(this.fileId, undefined, undefined, key)
+        new StringToken(this.fileId, line, col, key)
       )
       for (const child of this.getNodes(node.value)) {
         yield child
@@ -89,20 +103,25 @@ export class YamlObjectReader implements ObjectReader {
     }
   }
 
-  private static getLiteralToken(fileId: number | undefined, token: Scalar) {
-    const value = token.value
+  private static getLiteralToken(
+    fileId: number | undefined,
+    line: number | undefined,
+    col: number | undefined,
+    token: Scalar
+  ) {
+    var value = token.value
 
     if (!value) {
-      return new NullToken(fileId, undefined, undefined)
+      return new NullToken(fileId, line, col)
     }
 
     switch (typeof value) {
       case "number":
-        return new NumberToken(fileId, undefined, undefined, value)
+        return new NumberToken(fileId, line, col, value)
       case "boolean":
-        return new BooleanToken(fileId, undefined, undefined, value)
+        return new BooleanToken(fileId, line, col, value)
       case "string":
-        return new StringToken(fileId, undefined, undefined, value)
+        return new StringToken(fileId, line, col, value)
       default:
         throw new Error(
           `Unexpected value type '${typeof value}' when reading object`
