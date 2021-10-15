@@ -186,6 +186,7 @@
                               },
                               "value": {
                                 "type": 3,
+                                "file": 1,
                                 "line": 5,
                                 "col": 12,
                                 "expr": "format('echo sha={0}', github.sha)"
@@ -282,6 +283,7 @@
                                 },
                                 "value": {
                                   "type": 3,
+                                  "file": 1,
                                   "line": 5,
                                   "col": 14,
                                   "expr": "fromJson(needs.compute-matrix.outputs.arch-array)"
@@ -303,6 +305,7 @@
                                   "seq": [
                                     {
                                       "type": 3,
+                                      "file": 1,
                                       "line": 7,
                                       "col": 11,
                                       "expr": "fromJson(needs.compute-matrix.outputs.os-array)"
@@ -326,6 +329,7 @@
                     },
                     "value": {
                       "type": 3,
+                      "file": 1,
                       "line": 8,
                       "col": 13,
                       "expr": "matrix.os"
@@ -361,6 +365,7 @@
                               },
                               "value": {
                                 "type": 3,
+                                "file": 1,
                                 "line": 10,
                                 "col": 12,
                                 "expr": "format('build {0}', matrix.arch)"
