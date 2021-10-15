@@ -36,13 +36,7 @@ export class YamlObjectReader implements ObjectReader {
   }
 
   private *getNodes(node: unknown): Generator<ParseEvent, void> {
-    const range = (node as NodeBase)?.range ?? []
-    const startPosition = range[0]
-
-    const { line, col } =
-      startPosition !== undefined
-        ? this.lineCounter.linePos(startPosition)
-        : { line: undefined, col: undefined }
+    let { line, col } = this.getLinePos(node as NodeBase | undefined)
 
     if (isDocument(node)) {
       yield new ParseEvent(EventType.DocumentStart)
@@ -86,6 +80,7 @@ export class YamlObjectReader implements ObjectReader {
 
     if (isPair(node)) {
       const scalarKey = node.key as Scalar
+      ;({ line, col } = this.getLinePos(scalarKey))
       const key = scalarKey.value as string
       yield new ParseEvent(
         EventType.Literal,
@@ -95,6 +90,17 @@ export class YamlObjectReader implements ObjectReader {
         yield child
       }
     }
+  }
+
+  private getLinePos(node: NodeBase | undefined): {
+    line: number | undefined
+    col: number | undefined
+  } {
+    const range = node?.range ?? []
+    const startPos = range[0]
+    return startPos !== undefined
+      ? this.lineCounter.linePos(startPos)
+      : { line: undefined, col: undefined }
   }
 
   private static getLiteralToken(

@@ -11,6 +11,8 @@
         "key": {
           "type": 0,
           "file": 1,
+          "line": 1,
+          "col": 1,
           "lit": "jobs"
         },
         "value": {
@@ -23,6 +25,8 @@
               "key": {
                 "type": 0,
                 "file": 1,
+                "line": 2,
+                "col": 3,
                 "lit": "build"
               },
               "value": {
@@ -35,6 +39,8 @@
                     "key": {
                       "type": 0,
                       "file": 1,
+                      "line": 3,
+                      "col": 5,
                       "lit": "runs-on"
                     },
                     "value": {
@@ -49,6 +55,8 @@
                     "key": {
                       "type": 0,
                       "file": 1,
+                      "line": 4,
+                      "col": 5,
                       "lit": "steps"
                     },
                     "value": {
@@ -67,6 +75,8 @@
                               "key": {
                                 "type": 0,
                                 "file": 1,
+                                "line": 5,
+                                "col": 9,
                                 "lit": "run"
                               },
                               "value": {
@@ -106,6 +116,8 @@
         "key": {
           "type": 0,
           "file": 1,
+          "line": 1,
+          "col": 1,
           "lit": "jobs"
         },
         "value": {
@@ -118,6 +130,8 @@
               "key": {
                 "type": 0,
                 "file": 1,
+                "line": 2,
+                "col": 3,
                 "lit": "build"
               },
               "value": {
@@ -130,6 +144,8 @@
                     "key": {
                       "type": 0,
                       "file": 1,
+                      "line": 3,
+                      "col": 4,
                       "lit": "runs-on"
                     },
                     "value": {
@@ -144,6 +160,8 @@
                     "key": {
                       "type": 0,
                       "file": 1,
+                      "line": 4,
+                      "col": 4,
                       "lit": "steps"
                     },
                     "value": {
@@ -162,6 +180,8 @@
                               "key": {
                                 "type": 0,
                                 "file": 1,
+                                "line": 5,
+                                "col": 7,
                                 "lit": "run"
                               },
                               "value": {
@@ -200,6 +220,8 @@
         "key": {
           "type": 0,
           "file": 1,
+          "line": 1,
+          "col": 1,
           "lit": "jobs"
         },
         "value": {
@@ -212,6 +234,8 @@
               "key": {
                 "type": 0,
                 "file": 1,
+                "line": 2,
+                "col": 3,
                 "lit": "build"
               },
               "value": {
@@ -224,6 +248,8 @@
                     "key": {
                       "type": 0,
                       "file": 1,
+                      "line": 3,
+                      "col": 4,
                       "lit": "strategy"
                     },
                     "value": {
@@ -236,6 +262,8 @@
                           "key": {
                             "type": 0,
                             "file": 1,
+                            "line": 4,
+                            "col": 6,
                             "lit": "matrix"
                           },
                           "value": {
@@ -248,6 +276,8 @@
                                 "key": {
                                   "type": 0,
                                   "file": 1,
+                                  "line": 5,
+                                  "col": 8,
                                   "lit": "arch"
                                 },
                                 "value": {
@@ -261,6 +291,8 @@
                                 "key": {
                                   "type": 0,
                                   "file": 1,
+                                  "line": 6,
+                                  "col": 8,
                                   "lit": "os"
                                 },
                                 "value": {
@@ -288,6 +320,8 @@
                     "key": {
                       "type": 0,
                       "file": 1,
+                      "line": 8,
+                      "col": 4,
                       "lit": "runs-on"
                     },
                     "value": {
@@ -301,6 +335,8 @@
                     "key": {
                       "type": 0,
                       "file": 1,
+                      "line": 9,
+                      "col": 4,
                       "lit": "steps"
                     },
                     "value": {
@@ -319,6 +355,8 @@
                               "key": {
                                 "type": 0,
                                 "file": 1,
+                                "line": 10,
+                                "col": 7,
                                 "lit": "run"
                               },
                               "value": {
