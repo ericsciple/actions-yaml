@@ -35,7 +35,7 @@ export function parseWorkflow(
     context,
     WORKFLOW_ROOT,
     new YamlObjectReader(fileId, fileContent),
-    undefined
+    fileId
   )
   return <ParseWorkflowResult>{
     value: result.value,
