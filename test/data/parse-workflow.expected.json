@@ -3,36 +3,43 @@
   "log": "",
   "value": {
     "type": 2,
+    "file": 1,
     "line": 1,
     "col": 1,
     "map": [
       {
         "key": {
           "type": 0,
+          "file": 1,
           "lit": "jobs"
         },
         "value": {
           "type": 2,
+          "file": 1,
           "line": 2,
           "col": 3,
           "map": [
             {
               "key": {
                 "type": 0,
+                "file": 1,
                 "lit": "build"
               },
               "value": {
                 "type": 2,
+                "file": 1,
                 "line": 3,
                 "col": 5,
                 "map": [
                   {
                     "key": {
                       "type": 0,
+                      "file": 1,
                       "lit": "runs-on"
                     },
                     "value": {
                       "type": 0,
+                      "file": 1,
                       "line": 3,
                       "col": 14,
                       "lit": "ubuntu-latest"
@@ -41,25 +48,30 @@
                   {
                     "key": {
                       "type": 0,
+                      "file": 1,
                       "lit": "steps"
                     },
                     "value": {
                       "type": 1,
+                      "file": 1,
                       "line": 5,
                       "col": 7,
                       "seq": [
                         {
                           "type": 2,
+                          "file": 1,
                           "line": 5,
                           "col": 9,
                           "map": [
                             {
                               "key": {
                                 "type": 0,
+                                "file": 1,
                                 "lit": "run"
                               },
                               "value": {
                                 "type": 0,
+                                "file": 1,
                                 "line": 5,
                                 "col": 14,
                                 "lit": "echo hi"
@@ -86,36 +98,43 @@
   "log": "",
   "value": {
     "type": 2,
+    "file": 1,
     "line": 1,
     "col": 1,
     "map": [
       {
         "key": {
           "type": 0,
+          "file": 1,
           "lit": "jobs"
         },
         "value": {
           "type": 2,
+          "file": 1,
           "line": 2,
           "col": 3,
           "map": [
             {
               "key": {
                 "type": 0,
+                "file": 1,
                 "lit": "build"
               },
               "value": {
                 "type": 2,
+                "file": 1,
                 "line": 3,
                 "col": 4,
                 "map": [
                   {
                     "key": {
                       "type": 0,
+                      "file": 1,
                       "lit": "runs-on"
                     },
                     "value": {
                       "type": 0,
+                      "file": 1,
                       "line": 3,
                       "col": 13,
                       "lit": "ubuntu-latest"
@@ -124,21 +143,25 @@
                   {
                     "key": {
                       "type": 0,
+                      "file": 1,
                       "lit": "steps"
                     },
                     "value": {
                       "type": 1,
+                      "file": 1,
                       "line": 5,
                       "col": 5,
                       "seq": [
                         {
                           "type": 2,
+                          "file": 1,
                           "line": 5,
                           "col": 7,
                           "map": [
                             {
                               "key": {
                                 "type": 0,
+                                "file": 1,
                                 "lit": "run"
                               },
                               "value": {
@@ -169,52 +192,62 @@
   "log": "",
   "value": {
     "type": 2,
+    "file": 1,
     "line": 1,
     "col": 1,
     "map": [
       {
         "key": {
           "type": 0,
+          "file": 1,
           "lit": "jobs"
         },
         "value": {
           "type": 2,
+          "file": 1,
           "line": 2,
           "col": 3,
           "map": [
             {
               "key": {
                 "type": 0,
+                "file": 1,
                 "lit": "build"
               },
               "value": {
                 "type": 2,
+                "file": 1,
                 "line": 3,
                 "col": 4,
                 "map": [
                   {
                     "key": {
                       "type": 0,
+                      "file": 1,
                       "lit": "strategy"
                     },
                     "value": {
                       "type": 2,
+                      "file": 1,
                       "line": 4,
                       "col": 6,
                       "map": [
                         {
                           "key": {
                             "type": 0,
+                            "file": 1,
                             "lit": "matrix"
                           },
                           "value": {
                             "type": 2,
+                            "file": 1,
                             "line": 5,
                             "col": 8,
                             "map": [
                               {
                                 "key": {
                                   "type": 0,
+                                  "file": 1,
                                   "lit": "arch"
                                 },
                                 "value": {
@@ -227,10 +260,12 @@
                               {
                                 "key": {
                                   "type": 0,
+                                  "file": 1,
                                   "lit": "os"
                                 },
                                 "value": {
                                   "type": 1,
+                                  "file": 1,
                                   "line": 7,
                                   "col": 9,
                                   "seq": [
@@ -252,6 +287,7 @@
                   {
                     "key": {
                       "type": 0,
+                      "file": 1,
                       "lit": "runs-on"
                     },
                     "value": {
@@ -264,21 +300,25 @@
                   {
                     "key": {
                       "type": 0,
+                      "file": 1,
                       "lit": "steps"
                     },
                     "value": {
                       "type": 1,
+                      "file": 1,
                       "line": 10,
                       "col": 5,
                       "seq": [
                         {
                           "type": 2,
+                          "file": 1,
                           "line": 10,
                           "col": 7,
                           "map": [
                             {
                               "key": {
                                 "type": 0,
+                                "file": 1,
                                 "lit": "run"
                               },
                               "value": {

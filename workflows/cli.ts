@@ -13,7 +13,7 @@ interface Input {
 }
 
 interface ParseWorkflowInput extends Input {
-  entryFileId: string
+  entryFileName: string
   files: File[]
 }
 
@@ -63,7 +63,7 @@ function execute(input: Input): void {
       case "parse-workflow": {
         const parseWorkflowInput = input as ParseWorkflowInput
         const result = parseWorkflow(
-          parseWorkflowInput.entryFileId,
+          parseWorkflowInput.entryFileName,
           parseWorkflowInput.files,
           trace
         )
