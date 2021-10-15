@@ -18,7 +18,7 @@ interface ParseWorkflowInput extends Input {
 }
 
 interface EvaluateStrategyInput extends Input {
-  files: string[]
+  fileTable: string[]
   context: any
   token: any
 }
@@ -74,7 +74,7 @@ function execute(input: Input): void {
       case "evaluate-strategy": {
         const evaluateStrategyInput = input as EvaluateStrategyInput
         const result = evaluateStrategy(
-          evaluateStrategyInput.files,
+          evaluateStrategyInput.fileTable,
           ContextData.fromDeserializedContextData(
             evaluateStrategyInput.context
           ) as DictionaryContextData,

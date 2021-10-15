@@ -19,7 +19,7 @@ export interface EvaluateWorkflowResult {
 }
 
 export function evaluateStrategy(
-  files: string[],
+  fileTable: string[],
   context: DictionaryContextData,
   token: TemplateToken,
   trace: TraceWriter
@@ -32,8 +32,8 @@ export function evaluateStrategy(
   )
 
   // Add each file name
-  for (const file of files) {
-    templateContext.getFileId(file)
+  for (const fileName of fileTable) {
+    templateContext.getFileId(fileName)
   }
 
   // Add expression named contexts

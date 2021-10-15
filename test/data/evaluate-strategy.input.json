@@ -1,7 +1,7 @@
 {
   "batchId": "1",
   "command": "evaluate-strategy",
-  "files": [".github/workflows/ci.yml"],
+  "fileTable": [".github/workflows/ci.yml"],
   "context": {{EVALUATE_STRATEGY_BATCH_1_CONTEXT}},
   "token": {{EVALUATE_STRATEGY_BATCH_1_TOKEN}}
 }
