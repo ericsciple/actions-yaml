@@ -2,7 +2,6 @@ import { TemplateToken } from "../templates/tokens"
 import { TraceWriter } from "../templates/trace-writer"
 import * as templateReader from "../templates/template-reader"
 import { WORKFLOW_ROOT } from "./workflow-constants"
-import { JSONObjectReader } from "../templates/json-object-reader"
 import { YamlObjectReader } from "./yaml-object-reader"
 import {
   TemplateContext,
@@ -19,7 +18,7 @@ export interface ParseWorkflowResult {
 }
 
 export function parseWorkflow(
-  entryFileId: string,
+  entryFileName: string,
   files: File[],
   trace: TraceWriter
 ): ParseWorkflowResult {
@@ -29,15 +28,13 @@ export function parseWorkflow(
     getWorkflowSchema(),
     trace
   )
-  const file = files.filter((x) => x.id === entryFileId)[0]
-  if (!file) {
-    throw new Error(`File '${entryFileId}' not found`)
-  }
-
+  files.forEach((x) => context.getFileId(x.name))
+  const fileId = context.getFileId(entryFileName)
+  const fileContent = files[fileId - 1].content
   const result = templateReader.readTemplate(
     context,
     WORKFLOW_ROOT,
-    new YamlObjectReader(undefined, file.content),
+    new YamlObjectReader(fileId, fileContent),
     undefined
   )
   return <ParseWorkflowResult>{
