@@ -1,0 +1,4 @@
+jobs:
+  build:
+    uses: my-org/my-repo/.github/workflows/deploy.yml@main
+    environment: prod

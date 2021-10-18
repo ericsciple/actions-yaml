@@ -138,21 +138,21 @@
                 "type": 2,
                 "file": 1,
                 "line": 3,
-                "col": 4,
+                "col": 5,
                 "map": [
                   {
                     "key": {
                       "type": 0,
                       "file": 1,
                       "line": 3,
-                      "col": 4,
+                      "col": 5,
                       "lit": "runs-on"
                     },
                     "value": {
                       "type": 0,
                       "file": 1,
                       "line": 3,
-                      "col": 13,
+                      "col": 14,
                       "lit": "ubuntu-latest"
                     }
                   },
@@ -161,34 +161,34 @@
                       "type": 0,
                       "file": 1,
                       "line": 4,
-                      "col": 4,
+                      "col": 5,
                       "lit": "steps"
                     },
                     "value": {
                       "type": 1,
                       "file": 1,
                       "line": 5,
-                      "col": 5,
+                      "col": 7,
                       "seq": [
                         {
                           "type": 2,
                           "file": 1,
                           "line": 5,
-                          "col": 7,
+                          "col": 9,
                           "map": [
                             {
                               "key": {
                                 "type": 0,
                                 "file": 1,
                                 "line": 5,
-                                "col": 7,
+                                "col": 9,
                                 "lit": "run"
                               },
                               "value": {
                                 "type": 3,
                                 "file": 1,
                                 "line": 5,
-                                "col": 12,
+                                "col": 14,
                                 "expr": "format('echo sha={0}', github.sha)"
                               }
                             }
@@ -243,49 +243,49 @@
                 "type": 2,
                 "file": 1,
                 "line": 3,
-                "col": 4,
+                "col": 5,
                 "map": [
                   {
                     "key": {
                       "type": 0,
                       "file": 1,
                       "line": 3,
-                      "col": 4,
+                      "col": 5,
                       "lit": "strategy"
                     },
                     "value": {
                       "type": 2,
                       "file": 1,
                       "line": 4,
-                      "col": 6,
+                      "col": 7,
                       "map": [
                         {
                           "key": {
                             "type": 0,
                             "file": 1,
                             "line": 4,
-                            "col": 6,
+                            "col": 7,
                             "lit": "matrix"
                           },
                           "value": {
                             "type": 2,
                             "file": 1,
                             "line": 5,
-                            "col": 8,
+                            "col": 9,
                             "map": [
                               {
                                 "key": {
                                   "type": 0,
                                   "file": 1,
                                   "line": 5,
-                                  "col": 8,
+                                  "col": 9,
                                   "lit": "arch"
                                 },
                                 "value": {
                                   "type": 3,
                                   "file": 1,
                                   "line": 5,
-                                  "col": 14,
+                                  "col": 15,
                                   "expr": "fromJson(needs.compute-matrix.outputs.arch-array)"
                                 }
                               },
@@ -294,20 +294,20 @@
                                   "type": 0,
                                   "file": 1,
                                   "line": 6,
-                                  "col": 8,
+                                  "col": 9,
                                   "lit": "os"
                                 },
                                 "value": {
                                   "type": 1,
                                   "file": 1,
                                   "line": 7,
-                                  "col": 9,
+                                  "col": 11,
                                   "seq": [
                                     {
                                       "type": 3,
                                       "file": 1,
                                       "line": 7,
-                                      "col": 11,
+                                      "col": 13,
                                       "expr": "fromJson(needs.compute-matrix.outputs.os-array)"
                                     }
                                   ]
@@ -324,14 +324,14 @@
                       "type": 0,
                       "file": 1,
                       "line": 8,
-                      "col": 4,
+                      "col": 5,
                       "lit": "runs-on"
                     },
                     "value": {
                       "type": 3,
                       "file": 1,
                       "line": 8,
-                      "col": 13,
+                      "col": 14,
                       "expr": "matrix.os"
                     }
                   },
@@ -340,34 +340,34 @@
                       "type": 0,
                       "file": 1,
                       "line": 9,
-                      "col": 4,
+                      "col": 5,
                       "lit": "steps"
                     },
                     "value": {
                       "type": 1,
                       "file": 1,
                       "line": 10,
-                      "col": 5,
+                      "col": 7,
                       "seq": [
                         {
                           "type": 2,
                           "file": 1,
                           "line": 10,
-                          "col": 7,
+                          "col": 9,
                           "map": [
                             {
                               "key": {
                                 "type": 0,
                                 "file": 1,
                                 "line": 10,
-                                "col": 7,
+                                "col": 9,
                                 "lit": "run"
                               },
                               "value": {
                                 "type": 3,
                                 "file": 1,
                                 "line": 10,
-                                "col": 12,
+                                "col": 14,
                                 "expr": "format('build {0}', matrix.arch)"
                               }
                             }
@@ -385,5 +385,73 @@
     ]
   },
   "errors": []
+}
+---
+{
+  "batchId": "4",
+  "log": ".github/workflows/ci.yml (Line: 4, Col: 5) The property 'environment' may not be used with the property 'uses'",
+  "value": {
+    "type": 2,
+    "file": 1,
+    "line": 1,
+    "col": 1,
+    "map": [
+      {
+        "key": {
+          "type": 0,
+          "file": 1,
+          "line": 1,
+          "col": 1,
+          "lit": "jobs"
+        },
+        "value": {
+          "type": 2,
+          "file": 1,
+          "line": 2,
+          "col": 3,
+          "map": [
+            {
+              "key": {
+                "type": 0,
+                "file": 1,
+                "line": 2,
+                "col": 3,
+                "lit": "build"
+              },
+              "value": {
+                "type": 2,
+                "file": 1,
+                "line": 3,
+                "col": 5,
+                "map": [
+                  {
+                    "key": {
+                      "type": 0,
+                      "file": 1,
+                      "line": 3,
+                      "col": 5,
+                      "lit": "uses"
+                    },
+                    "value": {
+                      "type": 0,
+                      "file": 1,
+                      "line": 3,
+                      "col": 11,
+                      "lit": "my-org/my-repo/.github/workflows/deploy.yml@main"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "errors": [
+    {
+      "message": ".github/workflows/ci.yml (Line: 4, Col: 5) The property 'environment' may not be used with the property 'uses'"
+    }
+  ]
 }
 ---

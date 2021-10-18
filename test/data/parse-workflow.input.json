@@ -34,3 +34,15 @@
   ]
 }
 ---
+{
+  "batchId": "4",
+  "command": "parse-workflow",
+  "entryFileName": ".github/workflows/ci.yml",
+  "files": [
+    {
+      "name": ".github/workflows/ci.yml",
+      "content": "{{WORKFLOW_PARSER_BATCH_4}}"
+    }
+  ]
+}
+---
