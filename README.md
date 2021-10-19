@@ -4,7 +4,13 @@
 
 This repo contains a prototype for porting the Actions workflow parser and template expansion library to TypeScript.
 
-The motivation for the project is to converge on one implementation that can be used everywhere. JavaScript is the most portable solution; it's a natural fit to be consumed by the web UI. Services written in other languages can interface with the utility as a command-line tool. Or wrapping the utility in a container may simplify the deployment process.
+Key solution aspects:
+- Portability
+  - Enables converging on one implementation. JavaScript can be consumed directly within the web UI. Services written in other languages can interface with the utility as a command-line tool. Or wrapping the utility in a container with REST interface may simplify the deployment process to services.
+- Safe to run on servers
+  - Memory safeguards are deeply built into expressions and templating libraries
+- Schema-driven; generic underlying expressions and templates library
+  - Schema-validating reader which can be used to parse/expand other schemas - e.g. action.yml or stack.yml
 
 ### Folder structure
 
