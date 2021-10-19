@@ -6,7 +6,7 @@ This repo contains a prototype for porting the Actions workflow parser and templ
 
 Key solution aspects:
 - Portability
-  - Enables converging on one implementation. JavaScript can be consumed directly within the web UI. Services written in other languages can interface with the utility as a command-line tool. Or wrapping the utility in a container with REST interface may simplify the deployment process to services.
+  - Enables converging on one implementation. JavaScript can be consumed directly within the web UI. Services can consume as a container (REST interface). Also supports command-line interface.
 - Safe to run on servers
   - Memory safeguards are deeply built into expressions and templating libraries
 - Schema-driven; generic underlying expressions and templates library
