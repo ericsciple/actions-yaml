@@ -4,7 +4,7 @@
 
 This repo contains a prototype for porting the Actions workflow parser and template expansion library to TypeScript.
 
-The motivation for the project is to converge on one implementation that can be used everywhere. JavaScript is the most portable solution, since it can be used natively in the web UI.
+The motivation for the project is to converge on one implementation that can be used everywhere. JavaScript is the most portable solution; it's a natural fit to be consumed by the web UI. Services written in other languages can interface with the utility as a command-line tool. Or wrapping the utility in a container may simplify deployment process.
 
 ### Folder structure
 
