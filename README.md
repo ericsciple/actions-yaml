@@ -1,10 +1,10 @@
 # actions-yaml
 
-### Overview
+### Summary
 
-This repo contains a prototype for porting the Actions workflow parser and template expansion library to TypeScript.
+Prototype for porting the Actions workflow parser and template expansion library to TypeScript.
 
-Key solution aspects:
+Key aspects:
 - Portability
   - Enables converging on one implementation. JavaScript can be consumed directly within the web UI. Services can consume as a container (REST interface). Also supports command-line interface.
 - Safe to run on servers
