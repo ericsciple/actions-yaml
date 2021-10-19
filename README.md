@@ -1,5 +1,13 @@
 # actions-yaml
 
+### Overview
+
+This repo contains a prototype for porting the Actions workflow parser and template expansion library to TypeScript.
+
+The motivation for the project is to converge on one implementation that can be used everywhere. JavaScript is the most portable solution, since it can be used natively in the web.
+
+### Folder structure
+
 - `./expressions/`
   - Generic expression library
 - `./templates/`
@@ -8,8 +16,10 @@
     - reads DOM using ObjectReader interface; convert to TemplateToken; schema validate
   - template-evaluator.ts expands a TemplateToken
     - expands a TemplateToken; schema validates result
-- `./actions/`
-  - Actions-specific usage of templating
+- `./workflows/`
+  - Parses and expands an Actions workflow.yml
+
+<!--
 
 TODO:
 
@@ -27,7 +37,6 @@ TODO:
   - AzDevNext today:
     - Initial YAML parse: /Users/eric/repos/azdevnext/src/Actions/Runtime/Client/WebApi/Pipelines/ObjectTemplating/PipelineTemplateParser.cs
 - Testing
-  - envsubst
   - jest
 
 - Interface with Actions Service
@@ -42,8 +51,9 @@ TODO:
   - Split into multiple packages (yet make local changes work)
   - Better error message for mututally exclusive keys
   - Deeper validation rules (i.e. stuff that pipeline-template-converter does)
+-->
 
-### Development Setup
+### Development setup
 
 ```sh
 npm install # install npm dependencies
