@@ -1,8 +1,9 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
 const path = require("path")
+const TerserPlugin = require('terser-webpack-plugin');
 
-const isProduction = process.env.NODE_ENV == "production"
+const isProduction = true //process.env.NODE_ENV == "production"
 
 const config = {
   entry: "./lib/main.js",
@@ -17,17 +18,23 @@ const config = {
     rules: [
       {
         test: /\.(js|jsx)$/i,
+        exclude: /[\\/]node_modules[\\/]/,
         loader: "babel-loader",
-      },
-      {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: "asset",
-      },
+      }
 
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
     ],
   },
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        // Use multi-process parallel running to improve the build speed
+        // Default number of concurrent runs: os.cpus().length - 1
+        parallel: true
+      })
+    ]
+  }
 }
 
 module.exports = () => {
