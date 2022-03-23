@@ -206,6 +206,8 @@ class TemplateReader {
       looseValueType = mappingDefinitions[0].looseValueType
     }
 
+    const originalDefinitions = mappingDefinitions.slice()
+    const wellKnownKeys: { [key: string]: boolean } = {}
     const upperKeys: { [upperKey: string]: boolean } = {}
     let hasExpressionKey = false
 
@@ -230,7 +232,7 @@ class TemplateReader {
         else {
           this._context.error(
             nextKeyScalar,
-            "A template expression is not allowed in this context"
+            "An expression is not allowed here"
           )
           this.skipValue()
         }
@@ -252,7 +254,10 @@ class TemplateReader {
       // Duplicate
       const upperKey = nextKey.value.toUpperCase()
       if (upperKeys[upperKey]) {
-        this._context.error(nextKey, `'${nextKey.value}' is already defined`)
+        this._context.error(
+          nextKey,
+          `The property '${nextKey.value}' is already defined`
+        )
         this.skipValue()
         continue
       }
@@ -264,6 +269,7 @@ class TemplateReader {
         nextKey.value
       )
       if (nextValueType) {
+        wellKnownKeys[nextKey.value] = true
         this._memory.addToken(nextKey, false)
         const nextValueDefinition = new DefinitionInfo(
           definition,
@@ -288,8 +294,37 @@ class TemplateReader {
         continue
       }
 
-      // Error
-      this._context.error(nextKey, `Unexpected value '${nextKey.value}'`)
+      // Error mutually exclusive key
+      const exclusiveDefinitions = originalDefinitions.slice()
+      if (
+        mappingDefinitions.length < originalDefinitions.length &&
+        this._schema.matchPropertyAndFilter(exclusiveDefinitions, nextKey.value)
+      ) {
+        let exclusiveKey: string | undefined
+        for (const wellKnownKey of Object.keys(wellKnownKeys)) {
+          if (
+            !this._schema.matchPropertyAndFilter(
+              exclusiveDefinitions,
+              wellKnownKey
+            )
+          ) {
+            exclusiveKey = wellKnownKey
+            break
+          }
+        }
+
+        if (exclusiveKey) {
+          this._context.error(
+            nextKey,
+            `The property '${nextKey.value}' may not be used with the property '${exclusiveKey}'`
+          )
+          this.skipValue()
+          continue
+        }
+      }
+
+      // Error unexpected key
+      this._context.error(nextKey, `Unexpected property '${nextKey.value}'`)
       this.skipValue()
     }
 
@@ -362,7 +397,7 @@ class TemplateReader {
         else {
           this._context.error(
             nextKeyScalar,
-            "A template expression is not allowed in this context"
+            "An expression is not allowed here"
           )
           this.skipValue()
         }
@@ -475,10 +510,7 @@ class TemplateReader {
       case BASIC_EXPRESSION_TYPE:
         // Illegal
         if (definition.allowedContext.length === 0) {
-          this._context.error(
-            scalar,
-            "A template expression is not allowed in this context"
-          )
+          this._context.error(scalar, "An expression is not allowed here")
         }
 
         return scalar
@@ -561,7 +593,7 @@ class TemplateReader {
         if (expression.directive && (startExpression !== 0 || i < raw.length)) {
           this._context.error(
             token,
-            `The directive '${expression.directive}' is not allowed in this context. Directives are not supported for expressions that are embedded within a string. Directives are only supported when the entire value is an expression.`
+            `The directive '${expression.directive}' is not allowed here. Directives are not supported for expressions embedded within strings. Directives are only supported when the entire value is an expression.`
           )
           return token
         }

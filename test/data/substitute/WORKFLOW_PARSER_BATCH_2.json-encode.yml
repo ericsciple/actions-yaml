@@ -1,5 +1,5 @@
 jobs:
   build:
-   runs-on: ubuntu-latest
-   steps:
-    - run: echo sha=${{ github.sha }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo sha=${{ github.sha }}
